@@ -54,7 +54,7 @@ STATS:
         BACKGROUND_IMAGE: background.png
         ANCHOR: rt
 
-  # ── CPU ──────────────────────────────────────────────────────────────────
+  # ── CPU  (card 82..640, HDR_H=36, divider at 118) ────────────────────────
   CPU:
     PERCENTAGE:
       INTERVAL: 1
@@ -71,7 +71,7 @@ STATS:
       GRAPH:
         SHOW: True
         X: 20
-        Y: 245
+        Y: 248
         WIDTH: 440
         HEIGHT: 22
         MIN_VALUE: 0
@@ -82,9 +82,9 @@ STATS:
       LINE_GRAPH:
         SHOW: True
         X: 20
-        Y: 358
+        Y: 462
         WIDTH: 440
-        HEIGHT: 130
+        HEIGHT: 160
         MIN_VALUE: 0
         MAX_VALUE: 100
         HISTORY_SIZE: 120
@@ -99,7 +99,7 @@ STATS:
         SHOW: True
         SHOW_UNIT: True
         X: 20
-        Y: 125
+        Y: 126
         FONT: jetbrains-mono/JetBrainsMono-ExtraBold.ttf
         FONT_SIZE: 58
         FONT_COLOR: 224, 226, 230
@@ -111,7 +111,7 @@ STATS:
         SHOW: True
         SHOW_UNIT: True
         X: 20
-        Y: 200
+        Y: 202
         FONT: jetbrains-mono/JetBrainsMono-Bold.ttf
         FONT_SIZE: 28
         FONT_COLOR: 95, 179, 214
@@ -123,15 +123,15 @@ STATS:
         SHOW: True
         SHOW_UNIT: True
         X: 460
-        Y: 205
+        Y: 207
         FONT: jetbrains-mono/JetBrainsMono-Regular.ttf
         FONT_SIZE: 20
         FONT_COLOR: 140, 144, 153
         BACKGROUND_IMAGE: background.png
         ANCHOR: rt
 
-  # ── GPU ──────────────────────────────────────────────────────────────────
-  # GPU card yt=582, HDR_H=36 → divider at 618; content starts at 626+
+  # ── GPU  (card 644..1000, HDR_H=36, divider at 680) ──────────────────────
+  # GPU% and VRAM% line graphs are side-by-side, labelled in background.png
   GPU:
     INTERVAL: 1
     PERCENTAGE:
@@ -139,7 +139,7 @@ STATS:
         SHOW: True
         SHOW_UNIT: True
         X: 460
-        Y: 630
+        Y: 693
         FONT: jetbrains-mono/JetBrainsMono-Bold.ttf
         FONT_SIZE: 44
         FONT_COLOR: 224, 226, 230
@@ -148,7 +148,7 @@ STATS:
       GRAPH:
         SHOW: True
         X: 20
-        Y: 745
+        Y: 800
         WIDTH: 440
         HEIGHT: 22
         MIN_VALUE: 0
@@ -159,9 +159,9 @@ STATS:
       LINE_GRAPH:
         SHOW: True
         X: 20
-        Y: 832
-        WIDTH: 440
-        HEIGHT: 130
+        Y: 866
+        WIDTH: 210
+        HEIGHT: 100
         MIN_VALUE: 0
         MAX_VALUE: 100
         HISTORY_SIZE: 120
@@ -175,7 +175,7 @@ STATS:
         SHOW: True
         SHOW_UNIT: True
         X: 20
-        Y: 625
+        Y: 688
         FONT: jetbrains-mono/JetBrainsMono-ExtraBold.ttf
         FONT_SIZE: 58
         FONT_COLOR: 224, 226, 230
@@ -185,7 +185,7 @@ STATS:
       GRAPH:
         SHOW: True
         X: 20
-        Y: 775
+        Y: 830
         WIDTH: 440
         HEIGHT: 14
         MIN_VALUE: 0
@@ -193,12 +193,26 @@ STATS:
         BAR_COLOR: 70, 130, 160
         BAR_OUTLINE: False
         BACKGROUND_COLOR: 32, 35, 42
+      LINE_GRAPH:
+        SHOW: True
+        X: 250
+        Y: 866
+        WIDTH: 210
+        HEIGHT: 100
+        MIN_VALUE: 0
+        MAX_VALUE: 100
+        HISTORY_SIZE: 120
+        AUTOSCALE: False
+        LINE_COLOR: 70, 130, 160
+        LINE_WIDTH: 2
+        AXIS: False
+        BACKGROUND_IMAGE: background.png
     MEMORY_USED:
       TEXT:
         SHOW: True
         SHOW_UNIT: True
         X: 20
-        Y: 697
+        Y: 758
         FONT: jetbrains-mono/JetBrainsMono-Regular.ttf
         FONT_SIZE: 22
         FONT_COLOR: 140, 144, 153
@@ -209,15 +223,15 @@ STATS:
         SHOW: True
         SHOW_UNIT: True
         X: 460
-        Y: 697
+        Y: 758
         FONT: jetbrains-mono/JetBrainsMono-Regular.ttf
         FONT_SIZE: 22
         FONT_COLOR: 140, 144, 153
         BACKGROUND_IMAGE: background.png
         ANCHOR: rt
 
-  # ── MEMORY ───────────────────────────────────────────────────────────────
-  # MEM card yt=1022, HDR_H=36 → divider at 1058; content starts at 1063+
+  # ── MEMORY  (card 1004..1230, HDR_H=36, divider at 1040) ─────────────────
+  # MemUsedGB / MemTotalGB shown via CUSTOM sensors; built-in USED/TOTAL hidden.
   MEMORY:
     INTERVAL: 5
     VIRTUAL:
@@ -225,7 +239,7 @@ STATS:
         SHOW: True
         SHOW_UNIT: True
         X: 460
-        Y: 1063
+        Y: 1048
         FONT: jetbrains-mono/JetBrainsMono-Bold.ttf
         FONT_SIZE: 44
         FONT_COLOR: 224, 226, 230
@@ -234,7 +248,7 @@ STATS:
       GRAPH:
         SHOW: True
         X: 20
-        Y: 1123
+        Y: 1110
         WIDTH: 440
         HEIGHT: 22
         MIN_VALUE: 0
@@ -242,29 +256,29 @@ STATS:
         BAR_COLOR: 95, 179, 214
         BAR_OUTLINE: False
         BACKGROUND_COLOR: 32, 35, 42
-      USED:
+      LINE_GRAPH:
         SHOW: True
-        SHOW_UNIT: True
         X: 20
-        Y: 1156
-        FONT: jetbrains-mono/JetBrainsMono-Regular.ttf
-        FONT_SIZE: 20
-        FONT_COLOR: 140, 144, 153
+        Y: 1146
+        WIDTH: 440
+        HEIGHT: 72
+        MIN_VALUE: 0
+        MAX_VALUE: 100
+        HISTORY_SIZE: 120
+        AUTOSCALE: False
+        LINE_COLOR: 95, 179, 214
+        LINE_WIDTH: 2
+        AXIS: False
         BACKGROUND_IMAGE: background.png
-        ANCHOR: lt
+      USED:
+        SHOW: False
+      FREE:
+        SHOW: False
       TOTAL:
-        SHOW: True
-        SHOW_UNIT: True
-        X: 460
-        Y: 1156
-        FONT: jetbrains-mono/JetBrainsMono-Regular.ttf
-        FONT_SIZE: 20
-        FONT_COLOR: 140, 144, 153
-        BACKGROUND_IMAGE: background.png
-        ANCHOR: rt
+        SHOW: False
 
-  # ── DISK ─────────────────────────────────────────────────────────────────
-  # DISK card yt=1272, HDR_H=36 → divider at 1308; content starts at 1313+
+  # ── DISK  (card 1234..1520, HDR_H=36, divider at 1270) ───────────────────
+  # DiskReadMBs / DiskWriteMBs shown via CUSTOM sensors below.
   DISK:
     INTERVAL: 10
     USED:
@@ -272,7 +286,7 @@ STATS:
         SHOW: True
         SHOW_UNIT: True
         X: 460
-        Y: 1313
+        Y: 1278
         FONT: jetbrains-mono/JetBrainsMono-Bold.ttf
         FONT_SIZE: 44
         FONT_COLOR: 224, 226, 230
@@ -281,7 +295,7 @@ STATS:
       GRAPH:
         SHOW: True
         X: 20
-        Y: 1373
+        Y: 1338
         WIDTH: 440
         HEIGHT: 22
         MIN_VALUE: 0
@@ -293,7 +307,7 @@ STATS:
         SHOW: True
         SHOW_UNIT: True
         X: 20
-        Y: 1406
+        Y: 1372
         FONT: jetbrains-mono/JetBrainsMono-Regular.ttf
         FONT_SIZE: 20
         FONT_COLOR: 140, 144, 153
@@ -304,15 +318,14 @@ STATS:
         SHOW: True
         SHOW_UNIT: True
         X: 460
-        Y: 1406
+        Y: 1372
         FONT: jetbrains-mono/JetBrainsMono-Regular.ttf
         FONT_SIZE: 20
         FONT_COLOR: 140, 144, 153
         BACKGROUND_IMAGE: background.png
         ANCHOR: rt
 
-  # ── NETWORK ──────────────────────────────────────────────────────────────
-  # NET card yt=1522, HDR_H=36 → divider at 1558; content starts at 1562+
+  # ── NET  (card 1670..1918, HDR_H=36, divider at 1706) ────────────────────
   NET:
     INTERVAL: 2
     ETH:
@@ -321,7 +334,7 @@ STATS:
           SHOW: True
           SHOW_UNIT: True
           X: 460
-          Y: 1562
+          Y: 1710
           FONT: jetbrains-mono/JetBrainsMono-Bold.ttf
           FONT_SIZE: 22
           FONT_COLOR: 95, 179, 214
@@ -330,9 +343,9 @@ STATS:
         LINE_GRAPH:
           SHOW: True
           X: 20
-          Y: 1596
+          Y: 1732
           WIDTH: 440
-          HEIGHT: 140
+          HEIGHT: 80
           MIN_VALUE: 0
           MAX_VALUE: 1000000
           HISTORY_SIZE: 120
@@ -346,7 +359,7 @@ STATS:
           SHOW: True
           SHOW_UNIT: True
           X: 460
-          Y: 1748
+          Y: 1820
           FONT: jetbrains-mono/JetBrainsMono-Bold.ttf
           FONT_SIZE: 22
           FONT_COLOR: 95, 179, 214
@@ -355,9 +368,9 @@ STATS:
         LINE_GRAPH:
           SHOW: True
           X: 20
-          Y: 1782
+          Y: 1842
           WIDTH: 440
-          HEIGHT: 130
+          HEIGHT: 70
           MIN_VALUE: 0
           MAX_VALUE: 1000000
           HISTORY_SIZE: 120
@@ -369,12 +382,134 @@ STATS:
 
   CUSTOM:
     INTERVAL: 1
+
+    # Memory GB (framework hardcodes MB; these show GB at 1 d.p.)
+    MemUsedGB:
+      TEXT:
+        SHOW: True
+        SHOW_UNIT: False
+        X: 20
+        Y: 1050
+        FONT: jetbrains-mono/JetBrainsMono-Bold.ttf
+        FONT_SIZE: 32
+        FONT_COLOR: 95, 179, 214
+        BACKGROUND_IMAGE: background.png
+        ANCHOR: lt
+    MemTotalGB:
+      TEXT:
+        SHOW: True
+        SHOW_UNIT: False
+        X: 460
+        Y: 1055
+        FONT: jetbrains-mono/JetBrainsMono-Regular.ttf
+        FONT_SIZE: 22
+        FONT_COLOR: 140, 144, 153
+        BACKGROUND_IMAGE: background.png
+        ANCHOR: rt
+
+    # Disk I/O speeds with history line graphs
+    DiskReadMBs:
+      TEXT:
+        SHOW: True
+        SHOW_UNIT: False
+        X: 460
+        Y: 1396
+        FONT: jetbrains-mono/JetBrainsMono-Bold.ttf
+        FONT_SIZE: 22
+        FONT_COLOR: 95, 179, 214
+        BACKGROUND_IMAGE: background.png
+        ANCHOR: rt
+      LINE_GRAPH:
+        SHOW: True
+        X: 20
+        Y: 1420
+        WIDTH: 440
+        HEIGHT: 40
+        MIN_VALUE: 0
+        MAX_VALUE: 100
+        HISTORY_SIZE: 120
+        AUTOSCALE: True
+        LINE_COLOR: 95, 179, 214
+        LINE_WIDTH: 2
+        AXIS: False
+        BACKGROUND_IMAGE: background.png
+    DiskWriteMBs:
+      TEXT:
+        SHOW: True
+        SHOW_UNIT: False
+        X: 460
+        Y: 1464
+        FONT: jetbrains-mono/JetBrainsMono-Bold.ttf
+        FONT_SIZE: 22
+        FONT_COLOR: 70, 130, 160
+        BACKGROUND_IMAGE: background.png
+        ANCHOR: rt
+      LINE_GRAPH:
+        SHOW: True
+        X: 20
+        Y: 1488
+        WIDTH: 440
+        HEIGHT: 24
+        MIN_VALUE: 0
+        MAX_VALUE: 100
+        HISTORY_SIZE: 120
+        AUTOSCALE: True
+        LINE_COLOR: 70, 130, 160
+        LINE_WIDTH: 2
+        AXIS: False
+        BACKGROUND_IMAGE: background.png
+
+    # Power (GPU via pynvml; CPU via amdgpu hwmon PPT)
+    GpuPowerW:
+      TEXT:
+        SHOW: True
+        SHOW_UNIT: False
+        X: 460
+        Y: 1564
+        FONT: jetbrains-mono/JetBrainsMono-Bold.ttf
+        FONT_SIZE: 28
+        FONT_COLOR: 224, 226, 230
+        BACKGROUND_IMAGE: background.png
+        ANCHOR: rt
+      GRAPH:
+        SHOW: True
+        X: 20
+        Y: 1600
+        WIDTH: 440
+        HEIGHT: 18
+        MIN_VALUE: 0
+        MAX_VALUE: 170
+        BAR_COLOR: 95, 179, 214
+        BAR_OUTLINE: False
+        BACKGROUND_COLOR: 32, 35, 42
+    CpuPowerW:
+      TEXT:
+        SHOW: True
+        SHOW_UNIT: False
+        X: 460
+        Y: 1630
+        FONT: jetbrains-mono/JetBrainsMono-Bold.ttf
+        FONT_SIZE: 28
+        FONT_COLOR: 224, 226, 230
+        BACKGROUND_IMAGE: background.png
+        ANCHOR: rt
+      GRAPH:
+        SHOW: True
+        X: 20
+        Y: 1642
+        WIDTH: 440
+        HEIGHT: 16
+        MIN_VALUE: 0
+        MAX_VALUE: 170
+        BAR_COLOR: 95, 179, 214
+        BAR_OUTLINE: False
+        BACKGROUND_COLOR: 32, 35, 42
     CpuCore00:
       GRAPH:
         SHOW: True
-        X: 12
-        Y: 280
-        WIDTH: 24
+        X: 20
+        Y: 300
+        WIDTH: 48
         HEIGHT: 26
         MIN_VALUE: 0
         MAX_VALUE: 100
@@ -384,9 +519,9 @@ STATS:
     CpuCore01:
       GRAPH:
         SHOW: True
-        X: 40
-        Y: 280
-        WIDTH: 24
+        X: 76
+        Y: 300
+        WIDTH: 48
         HEIGHT: 26
         MIN_VALUE: 0
         MAX_VALUE: 100
@@ -396,9 +531,9 @@ STATS:
     CpuCore02:
       GRAPH:
         SHOW: True
-        X: 68
-        Y: 280
-        WIDTH: 24
+        X: 132
+        Y: 300
+        WIDTH: 48
         HEIGHT: 26
         MIN_VALUE: 0
         MAX_VALUE: 100
@@ -408,9 +543,9 @@ STATS:
     CpuCore03:
       GRAPH:
         SHOW: True
-        X: 96
-        Y: 280
-        WIDTH: 24
+        X: 188
+        Y: 300
+        WIDTH: 48
         HEIGHT: 26
         MIN_VALUE: 0
         MAX_VALUE: 100
@@ -420,9 +555,9 @@ STATS:
     CpuCore04:
       GRAPH:
         SHOW: True
-        X: 124
-        Y: 280
-        WIDTH: 24
+        X: 244
+        Y: 300
+        WIDTH: 48
         HEIGHT: 26
         MIN_VALUE: 0
         MAX_VALUE: 100
@@ -432,9 +567,9 @@ STATS:
     CpuCore05:
       GRAPH:
         SHOW: True
-        X: 152
-        Y: 280
-        WIDTH: 24
+        X: 300
+        Y: 300
+        WIDTH: 48
         HEIGHT: 26
         MIN_VALUE: 0
         MAX_VALUE: 100
@@ -444,9 +579,9 @@ STATS:
     CpuCore06:
       GRAPH:
         SHOW: True
-        X: 180
-        Y: 280
-        WIDTH: 24
+        X: 356
+        Y: 300
+        WIDTH: 48
         HEIGHT: 26
         MIN_VALUE: 0
         MAX_VALUE: 100
@@ -456,105 +591,9 @@ STATS:
     CpuCore07:
       GRAPH:
         SHOW: True
-        X: 208
-        Y: 280
-        WIDTH: 24
-        HEIGHT: 26
-        MIN_VALUE: 0
-        MAX_VALUE: 100
-        BAR_COLOR: 95, 179, 214
-        BAR_OUTLINE: False
-        BACKGROUND_COLOR: 32, 35, 42
-    CpuCore08:
-      GRAPH:
-        SHOW: True
-        X: 236
-        Y: 280
-        WIDTH: 24
-        HEIGHT: 26
-        MIN_VALUE: 0
-        MAX_VALUE: 100
-        BAR_COLOR: 95, 179, 214
-        BAR_OUTLINE: False
-        BACKGROUND_COLOR: 32, 35, 42
-    CpuCore09:
-      GRAPH:
-        SHOW: True
-        X: 264
-        Y: 280
-        WIDTH: 24
-        HEIGHT: 26
-        MIN_VALUE: 0
-        MAX_VALUE: 100
-        BAR_COLOR: 95, 179, 214
-        BAR_OUTLINE: False
-        BACKGROUND_COLOR: 32, 35, 42
-    CpuCore10:
-      GRAPH:
-        SHOW: True
-        X: 292
-        Y: 280
-        WIDTH: 24
-        HEIGHT: 26
-        MIN_VALUE: 0
-        MAX_VALUE: 100
-        BAR_COLOR: 95, 179, 214
-        BAR_OUTLINE: False
-        BACKGROUND_COLOR: 32, 35, 42
-    CpuCore11:
-      GRAPH:
-        SHOW: True
-        X: 320
-        Y: 280
-        WIDTH: 24
-        HEIGHT: 26
-        MIN_VALUE: 0
-        MAX_VALUE: 100
-        BAR_COLOR: 95, 179, 214
-        BAR_OUTLINE: False
-        BACKGROUND_COLOR: 32, 35, 42
-    CpuCore12:
-      GRAPH:
-        SHOW: True
-        X: 348
-        Y: 280
-        WIDTH: 24
-        HEIGHT: 26
-        MIN_VALUE: 0
-        MAX_VALUE: 100
-        BAR_COLOR: 95, 179, 214
-        BAR_OUTLINE: False
-        BACKGROUND_COLOR: 32, 35, 42
-    CpuCore13:
-      GRAPH:
-        SHOW: True
-        X: 376
-        Y: 280
-        WIDTH: 24
-        HEIGHT: 26
-        MIN_VALUE: 0
-        MAX_VALUE: 100
-        BAR_COLOR: 95, 179, 214
-        BAR_OUTLINE: False
-        BACKGROUND_COLOR: 32, 35, 42
-    CpuCore14:
-      GRAPH:
-        SHOW: True
-        X: 404
-        Y: 280
-        WIDTH: 24
-        HEIGHT: 26
-        MIN_VALUE: 0
-        MAX_VALUE: 100
-        BAR_COLOR: 95, 179, 214
-        BAR_OUTLINE: False
-        BACKGROUND_COLOR: 32, 35, 42
-    CpuCore15:
-      GRAPH:
-        SHOW: True
-        X: 432
-        Y: 280
-        WIDTH: 24
+        X: 412
+        Y: 300
+        WIDTH: 48
         HEIGHT: 26
         MIN_VALUE: 0
         MAX_VALUE: 100
@@ -564,9 +603,9 @@ STATS:
     CpuCore16:
       GRAPH:
         SHOW: True
-        X: 12
-        Y: 316
-        WIDTH: 24
+        X: 20
+        Y: 336
+        WIDTH: 48
         HEIGHT: 26
         MIN_VALUE: 0
         MAX_VALUE: 100
@@ -576,9 +615,9 @@ STATS:
     CpuCore17:
       GRAPH:
         SHOW: True
-        X: 40
-        Y: 316
-        WIDTH: 24
+        X: 76
+        Y: 336
+        WIDTH: 48
         HEIGHT: 26
         MIN_VALUE: 0
         MAX_VALUE: 100
@@ -588,9 +627,9 @@ STATS:
     CpuCore18:
       GRAPH:
         SHOW: True
-        X: 68
-        Y: 316
-        WIDTH: 24
+        X: 132
+        Y: 336
+        WIDTH: 48
         HEIGHT: 26
         MIN_VALUE: 0
         MAX_VALUE: 100
@@ -600,9 +639,9 @@ STATS:
     CpuCore19:
       GRAPH:
         SHOW: True
-        X: 96
-        Y: 316
-        WIDTH: 24
+        X: 188
+        Y: 336
+        WIDTH: 48
         HEIGHT: 26
         MIN_VALUE: 0
         MAX_VALUE: 100
@@ -612,9 +651,9 @@ STATS:
     CpuCore20:
       GRAPH:
         SHOW: True
-        X: 124
-        Y: 316
-        WIDTH: 24
+        X: 244
+        Y: 336
+        WIDTH: 48
         HEIGHT: 26
         MIN_VALUE: 0
         MAX_VALUE: 100
@@ -624,9 +663,9 @@ STATS:
     CpuCore21:
       GRAPH:
         SHOW: True
-        X: 152
-        Y: 316
-        WIDTH: 24
+        X: 300
+        Y: 336
+        WIDTH: 48
         HEIGHT: 26
         MIN_VALUE: 0
         MAX_VALUE: 100
@@ -636,9 +675,9 @@ STATS:
     CpuCore22:
       GRAPH:
         SHOW: True
-        X: 180
-        Y: 316
-        WIDTH: 24
+        X: 356
+        Y: 336
+        WIDTH: 48
         HEIGHT: 26
         MIN_VALUE: 0
         MAX_VALUE: 100
@@ -648,9 +687,105 @@ STATS:
     CpuCore23:
       GRAPH:
         SHOW: True
-        X: 208
-        Y: 316
-        WIDTH: 24
+        X: 412
+        Y: 336
+        WIDTH: 48
+        HEIGHT: 26
+        MIN_VALUE: 0
+        MAX_VALUE: 100
+        BAR_COLOR: 95, 179, 214
+        BAR_OUTLINE: False
+        BACKGROUND_COLOR: 32, 35, 42
+    CpuCore08:
+      GRAPH:
+        SHOW: True
+        X: 20
+        Y: 392
+        WIDTH: 48
+        HEIGHT: 26
+        MIN_VALUE: 0
+        MAX_VALUE: 100
+        BAR_COLOR: 95, 179, 214
+        BAR_OUTLINE: False
+        BACKGROUND_COLOR: 32, 35, 42
+    CpuCore09:
+      GRAPH:
+        SHOW: True
+        X: 76
+        Y: 392
+        WIDTH: 48
+        HEIGHT: 26
+        MIN_VALUE: 0
+        MAX_VALUE: 100
+        BAR_COLOR: 95, 179, 214
+        BAR_OUTLINE: False
+        BACKGROUND_COLOR: 32, 35, 42
+    CpuCore10:
+      GRAPH:
+        SHOW: True
+        X: 132
+        Y: 392
+        WIDTH: 48
+        HEIGHT: 26
+        MIN_VALUE: 0
+        MAX_VALUE: 100
+        BAR_COLOR: 95, 179, 214
+        BAR_OUTLINE: False
+        BACKGROUND_COLOR: 32, 35, 42
+    CpuCore11:
+      GRAPH:
+        SHOW: True
+        X: 188
+        Y: 392
+        WIDTH: 48
+        HEIGHT: 26
+        MIN_VALUE: 0
+        MAX_VALUE: 100
+        BAR_COLOR: 95, 179, 214
+        BAR_OUTLINE: False
+        BACKGROUND_COLOR: 32, 35, 42
+    CpuCore12:
+      GRAPH:
+        SHOW: True
+        X: 244
+        Y: 392
+        WIDTH: 48
+        HEIGHT: 26
+        MIN_VALUE: 0
+        MAX_VALUE: 100
+        BAR_COLOR: 95, 179, 214
+        BAR_OUTLINE: False
+        BACKGROUND_COLOR: 32, 35, 42
+    CpuCore13:
+      GRAPH:
+        SHOW: True
+        X: 300
+        Y: 392
+        WIDTH: 48
+        HEIGHT: 26
+        MIN_VALUE: 0
+        MAX_VALUE: 100
+        BAR_COLOR: 95, 179, 214
+        BAR_OUTLINE: False
+        BACKGROUND_COLOR: 32, 35, 42
+    CpuCore14:
+      GRAPH:
+        SHOW: True
+        X: 356
+        Y: 392
+        WIDTH: 48
+        HEIGHT: 26
+        MIN_VALUE: 0
+        MAX_VALUE: 100
+        BAR_COLOR: 95, 179, 214
+        BAR_OUTLINE: False
+        BACKGROUND_COLOR: 32, 35, 42
+    CpuCore15:
+      GRAPH:
+        SHOW: True
+        X: 412
+        Y: 392
+        WIDTH: 48
         HEIGHT: 26
         MIN_VALUE: 0
         MAX_VALUE: 100
@@ -660,9 +795,9 @@ STATS:
     CpuCore24:
       GRAPH:
         SHOW: True
-        X: 236
-        Y: 316
-        WIDTH: 24
+        X: 20
+        Y: 428
+        WIDTH: 48
         HEIGHT: 26
         MIN_VALUE: 0
         MAX_VALUE: 100
@@ -672,9 +807,9 @@ STATS:
     CpuCore25:
       GRAPH:
         SHOW: True
-        X: 264
-        Y: 316
-        WIDTH: 24
+        X: 76
+        Y: 428
+        WIDTH: 48
         HEIGHT: 26
         MIN_VALUE: 0
         MAX_VALUE: 100
@@ -684,9 +819,9 @@ STATS:
     CpuCore26:
       GRAPH:
         SHOW: True
-        X: 292
-        Y: 316
-        WIDTH: 24
+        X: 132
+        Y: 428
+        WIDTH: 48
         HEIGHT: 26
         MIN_VALUE: 0
         MAX_VALUE: 100
@@ -696,9 +831,9 @@ STATS:
     CpuCore27:
       GRAPH:
         SHOW: True
-        X: 320
-        Y: 316
-        WIDTH: 24
+        X: 188
+        Y: 428
+        WIDTH: 48
         HEIGHT: 26
         MIN_VALUE: 0
         MAX_VALUE: 100
@@ -708,9 +843,9 @@ STATS:
     CpuCore28:
       GRAPH:
         SHOW: True
-        X: 348
-        Y: 316
-        WIDTH: 24
+        X: 244
+        Y: 428
+        WIDTH: 48
         HEIGHT: 26
         MIN_VALUE: 0
         MAX_VALUE: 100
@@ -720,9 +855,9 @@ STATS:
     CpuCore29:
       GRAPH:
         SHOW: True
-        X: 376
-        Y: 316
-        WIDTH: 24
+        X: 300
+        Y: 428
+        WIDTH: 48
         HEIGHT: 26
         MIN_VALUE: 0
         MAX_VALUE: 100
@@ -732,9 +867,9 @@ STATS:
     CpuCore30:
       GRAPH:
         SHOW: True
-        X: 404
-        Y: 316
-        WIDTH: 24
+        X: 356
+        Y: 428
+        WIDTH: 48
         HEIGHT: 26
         MIN_VALUE: 0
         MAX_VALUE: 100
@@ -744,9 +879,9 @@ STATS:
     CpuCore31:
       GRAPH:
         SHOW: True
-        X: 432
-        Y: 316
-        WIDTH: 24
+        X: 412
+        Y: 428
+        WIDTH: 48
         HEIGHT: 26
         MIN_VALUE: 0
         MAX_VALUE: 100

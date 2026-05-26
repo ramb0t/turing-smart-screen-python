@@ -22,93 +22,64 @@
 # There is no limitation on how much custom data source classes can be added to this file
 # See CustomDataExample theme for the theme implementation part
 
+import glob
 import math
+import os
 import platform
+import time
 from abc import ABC, abstractmethod
 from typing import List
 
+import psutil
 
-# Custom data classes must be implemented in this file, inherit the CustomDataSource and implement its 2 methods
+
 class CustomDataSource(ABC):
     @abstractmethod
     def as_numeric(self) -> float:
-        # Numeric value will be used for graph and radial progress bars
-        # If there is no numeric value, keep this function empty
         pass
 
     @abstractmethod
     def as_string(self) -> str:
-        # Text value will be used for text display and radial progress bar inner text
-        # Numeric value can be formatted here to be displayed as expected
-        # It is also possible to return a text unrelated to the numeric value
-        # If this function is empty, the numeric value will be used as string without formatting
         pass
 
     @abstractmethod
     def last_values(self) -> List[float]:
-        # List of last numeric values will be used for plot graph
-        # If you do not want to draw a line graph or if your custom data has no numeric values, keep this function empty
         pass
 
 
 # Example for a custom data class that has numeric and text values
 class ExampleCustomNumericData(CustomDataSource):
-    # This list is used to store the last 10 values to display a line graph
-    last_val = [math.nan] * 10  # By default, it is filed with math.nan values to indicate there is no data stored
+    last_val = [math.nan] * 10
 
     def as_numeric(self) -> float:
-        # Numeric value will be used for graph and radial progress bars
-        # Here a Python function from another module can be called to get data
-        # Example: self.value = my_module.get_rgb_led_brightness() / audio.system_volume() ...
         self.value = 75.845
-
-        # Store the value to the history list that will be used for line graph
         self.last_val.append(self.value)
-        # Also remove the oldest value from history list
         self.last_val.pop(0)
-
         return self.value
 
     def as_string(self) -> str:
-        # Text value will be used for text display and radial progress bar inner text.
-        # Numeric value can be formatted here to be displayed as expected
-        # It is also possible to return a text unrelated to the numeric value
-        # If this function is empty, the numeric value will be used as string without formatting
-        # Example here: format numeric value: add unit as a suffix, and keep 1 digit decimal precision
         return f'{self.value:>5.1f}%'
-        # Important note! If your numeric value can vary in size, be sure to display it with a default size.
-        # E.g. if your value can range from 0 to 9999, you need to display it with at least 4 characters every time.
-        # --> return f'{self.as_numeric():>4}%'
-        # Otherwise, part of the previous value can stay displayed ("ghosting") after a refresh
 
     def last_values(self) -> List[float]:
-        # List of last numeric values will be used for plot graph
         return self.last_val
 
 
-# Example for a custom data class that only has text values
 class ExampleCustomTextOnlyData(CustomDataSource):
     def as_numeric(self) -> float:
-        # If there is no numeric value, keep this function empty
         pass
 
     def as_string(self) -> str:
-        # If a custom data class only has text values, it won't be possible to display graph or radial bars
         return "Python: " + platform.python_version()
 
     def last_values(self) -> List[float]:
-        # If a custom data class only has text values, it won't be possible to display line graph
         pass
 
 
-# --- Per-core CPU load (used by MinimalDark35 theme) -----------------------
-# Exposes CpuCore00..CpuCoreNN as numeric sensors backed by psutil.cpu_percent(percpu=True).
-# A shared cache keeps psutil from being polled 32 times per refresh cycle.
-import time
-import psutil
-
+# ---------------------------------------------------------------------------
+# Per-core CPU load  (CpuCore00..CpuCore31)
+# ---------------------------------------------------------------------------
 _PERCPU_CACHE = {"values": [], "ts": 0.0}
-_PERCPU_TTL = 0.5  # seconds; matches the theme's GRAPH refresh cadence
+_PERCPU_TTL = 0.5
 
 
 def _percpu_values() -> List[float]:
@@ -133,8 +104,181 @@ class _CpuCoreBase(CustomDataSource):
         return []
 
 
-# Generate CpuCore00..CpuCore31 (covers up to 32 logical CPUs)
 for _i in range(32):
     _cls = type(f"CpuCore{_i:02d}", (_CpuCoreBase,), {"core_index": _i})
     globals()[_cls.__name__] = _cls
 del _i, _cls
+
+
+# ---------------------------------------------------------------------------
+# Memory in GB  (MemUsedGB, MemTotalGB)
+# Framework stats.py hardcodes MB — these custom sensors provide GB at 1 d.p.
+# ---------------------------------------------------------------------------
+class MemUsedGB(CustomDataSource):
+    def as_numeric(self) -> float:
+        return psutil.virtual_memory().used / 1_073_741_824  # bytes → GiB
+
+    def as_string(self) -> str:
+        return f"{self.as_numeric():.1f}"
+
+    def last_values(self) -> List[float]:
+        return []
+
+
+class MemTotalGB(CustomDataSource):
+    def as_numeric(self) -> float:
+        return psutil.virtual_memory().total / 1_073_741_824
+
+    def as_string(self) -> str:
+        return f"{self.as_numeric():.1f}"
+
+    def last_values(self) -> List[float]:
+        return []
+
+
+# ---------------------------------------------------------------------------
+# Disk I/O speeds  (DiskReadMBs, DiskWriteMBs)
+# Polled via psutil.disk_io_counters() with a shared TTL cache.
+# History lists for LINE_GRAPH support are managed at module level.
+# as_string() calls _raw() (no history side-effect) to avoid double-append
+# when the framework calls both as_numeric() and as_string() per cycle.
+# ---------------------------------------------------------------------------
+_HIST_SZ = 120
+_DISK_IO_CACHE = {"ts": 0.0, "r_bytes": 0, "w_bytes": 0, "r_mbs": 0.0, "w_mbs": 0.0}
+_DISK_READ_HIST: List[float] = []
+_DISK_WRITE_HIST: List[float] = []
+_DISK_READ_TS: float = 0.0
+_DISK_WRITE_TS: float = 0.0
+
+
+def _poll_disk_io():
+    now = time.monotonic()
+    if now - _DISK_IO_CACHE["ts"] < 0.8:
+        return
+    io = psutil.disk_io_counters()
+    if _DISK_IO_CACHE["ts"] > 0:
+        dt = now - _DISK_IO_CACHE["ts"]
+        _DISK_IO_CACHE["r_mbs"] = (io.read_bytes - _DISK_IO_CACHE["r_bytes"]) / dt / 1_048_576
+        _DISK_IO_CACHE["w_mbs"] = (io.write_bytes - _DISK_IO_CACHE["w_bytes"]) / dt / 1_048_576
+    _DISK_IO_CACHE["r_bytes"] = io.read_bytes
+    _DISK_IO_CACHE["w_bytes"] = io.write_bytes
+    _DISK_IO_CACHE["ts"] = now
+
+
+class DiskReadMBs(CustomDataSource):
+    def as_numeric(self) -> float:
+        global _DISK_READ_TS
+        _poll_disk_io()
+        val = _DISK_IO_CACHE["r_mbs"]
+        now = time.monotonic()
+        if now - _DISK_READ_TS > 0.1:
+            _DISK_READ_TS = now
+            if len(_DISK_READ_HIST) != _HIST_SZ:
+                _DISK_READ_HIST[:] = [math.nan] * _HIST_SZ
+            _DISK_READ_HIST.append(val)
+            _DISK_READ_HIST.pop(0)
+        return val
+
+    def _raw(self) -> float:
+        _poll_disk_io()
+        return _DISK_IO_CACHE["r_mbs"]
+
+    def as_string(self) -> str:
+        return f"{self._raw():.1f}"
+
+    def last_values(self) -> List[float]:
+        return list(_DISK_READ_HIST)
+
+
+class DiskWriteMBs(CustomDataSource):
+    def as_numeric(self) -> float:
+        global _DISK_WRITE_TS
+        _poll_disk_io()
+        val = _DISK_IO_CACHE["w_mbs"]
+        now = time.monotonic()
+        if now - _DISK_WRITE_TS > 0.1:
+            _DISK_WRITE_TS = now
+            if len(_DISK_WRITE_HIST) != _HIST_SZ:
+                _DISK_WRITE_HIST[:] = [math.nan] * _HIST_SZ
+            _DISK_WRITE_HIST.append(val)
+            _DISK_WRITE_HIST.pop(0)
+        return val
+
+    def _raw(self) -> float:
+        _poll_disk_io()
+        return _DISK_IO_CACHE["w_mbs"]
+
+    def as_string(self) -> str:
+        return f"{self._raw():.1f}"
+
+    def last_values(self) -> List[float]:
+        return list(_DISK_WRITE_HIST)
+
+
+# ---------------------------------------------------------------------------
+# Power sensors  (GpuPowerW, CpuPowerW)
+#
+# GpuPowerW: NVIDIA GPU power via pynvml (nvidia-ml-py).
+#   Install: pip install nvidia-ml-py
+#
+# CpuPowerW: AMD CPU Package Power Tracking (PPT) from the amdgpu hwmon
+#   driver, which exposes it as power1_input in milliwatts.
+# ---------------------------------------------------------------------------
+
+# --- GPU power (pynvml) ---
+try:
+    import pynvml as _nvml
+    _nvml.nvmlInit()
+    _NVML_HANDLE = _nvml.nvmlDeviceGetHandleByIndex(0)
+    _NVML_OK = True
+except Exception:
+    _NVML_OK = False
+    _NVML_HANDLE = None
+
+
+class GpuPowerW(CustomDataSource):
+    def as_numeric(self) -> float:
+        if not _NVML_OK:
+            return math.nan
+        try:
+            return _nvml.nvmlDeviceGetPowerUsage(_NVML_HANDLE) / 1000.0  # mW → W
+        except Exception:
+            return math.nan
+
+    def as_string(self) -> str:
+        v = self.as_numeric()
+        return f"{v:.0f}" if not math.isnan(v) else "N/A"
+
+    def last_values(self) -> List[float]:
+        return []
+
+
+# --- CPU power (amdgpu hwmon PPT) ---
+_CPU_POWER_PATH: str = ""
+for _hwmon_dir in glob.glob("/sys/class/hwmon/hwmon*/"):
+    _name_f = os.path.join(_hwmon_dir, "name")
+    if os.path.exists(_name_f):
+        with open(_name_f) as _f:
+            if _f.read().strip() == "amdgpu":
+                _pwr_f = os.path.join(_hwmon_dir, "power1_input")
+                if os.path.exists(_pwr_f):
+                    _CPU_POWER_PATH = _pwr_f
+                    break
+
+
+class CpuPowerW(CustomDataSource):
+    def as_numeric(self) -> float:
+        if not _CPU_POWER_PATH:
+            return math.nan
+        try:
+            with open(_CPU_POWER_PATH) as f:
+                return int(f.read().strip()) / 1000.0  # mW → W
+        except Exception:
+            return math.nan
+
+    def as_string(self) -> str:
+        v = self.as_numeric()
+        return f"{v:.0f}" if not math.isnan(v) else "N/A"
+
+    def last_values(self) -> List[float]:
+        return []

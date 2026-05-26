@@ -6,7 +6,7 @@ from pathlib import Path
 from textwrap import dedent
 
 # --- palette / fonts -------------------------------------------------------
-ACCENT     = "95, 179, 214"    # cool cyan
+ACCENT     = "95, 179, 214"
 ACCENT_DIM = "70, 130, 160"
 TXT        = "224, 226, 230"
 TXT_DIM    = "140, 144, 153"
@@ -19,44 +19,69 @@ FONT_REG   = "jetbrains-mono/JetBrainsMono-Regular.ttf"
 
 BG = "background.png"
 
-# --- section Y-anchors (tweak here for spacing) ----------------------------
-#   HEADER  0..80
-#   CPU    80..580
-#   GPU   580..1020
-#   MEM  1020..1270
-#   DISK 1270..1520
-#   NET  1520..1920
+# --- section Y-anchors (must match make_background.py) ---------------------
+#  HEADER  2..78
+#  CPU    82..640
+#  GPU   644..1000
+#  MEM  1004..1230
+#  DISK 1234..1520
+#  POWER 1524..1666
+#  NET  1670..1918
 
-# --- per-core grid ---------------------------------------------------------
-PC_X0 = 12
-PC_W  = 24
+# --- per-core CCD grid -----------------------------------------------------
+# 9950X3D: 2 CCDs, 8 cores each, 2 HT threads → 4 rows of 8
+# CCD0: logical cores 0-7  (T0) + 16-23 (T1)
+# CCD1: logical cores 8-15 (T0) + 24-31 (T1)
+PC_X0 = 20
+PC_W  = 48
 PC_H  = 26
-PC_DX = 28    # 12 + 15*28 + 24 = 456  (24px right margin)
+PC_DX = 56   # 20 + 7*56 + 48 = 460  (20px each side margin)
+
+# Y rows for the 4 core rows
+PC_Y = {
+    "ccd0_t0": 300,   # cores 0-7
+    "ccd0_t1": 336,   # cores 16-23
+    "ccd1_t0": 392,   # cores 8-15
+    "ccd1_t1": 428,   # cores 24-31
+}
 
 
 def percore_block() -> str:
     lines = ["  CUSTOM:", "    INTERVAL: 1"]
-    for i in range(32):
-        row = 0 if i < 16 else 1
-        col = i if i < 16 else i - 16
-        x = PC_X0 + col * PC_DX
-        y = 280 if row == 0 else 316
-        lines.append(f"    CpuCore{i:02d}:")
-        lines.append(f"      GRAPH:")
-        lines.append(f"        SHOW: True")
-        lines.append(f"        X: {x}")
-        lines.append(f"        Y: {y}")
-        lines.append(f"        WIDTH: {PC_W}")
-        lines.append(f"        HEIGHT: {PC_H}")
-        lines.append(f"        MIN_VALUE: 0")
-        lines.append(f"        MAX_VALUE: 100")
-        lines.append(f"        BAR_COLOR: {ACCENT}")
-        lines.append(f"        BAR_OUTLINE: False")
-        lines.append(f"        BACKGROUND_COLOR: {BAR_BG}")
+    # CCD0 T0: logical 0-7 → col 0-7
+    for col, core in enumerate(range(0, 8)):
+        _core_bar(lines, core, PC_X0 + col * PC_DX, PC_Y["ccd0_t0"])
+    # CCD0 T1: logical 16-23 → col 0-7
+    for col, core in enumerate(range(16, 24)):
+        _core_bar(lines, core, PC_X0 + col * PC_DX, PC_Y["ccd0_t1"])
+    # CCD1 T0: logical 8-15 → col 0-7
+    for col, core in enumerate(range(8, 16)):
+        _core_bar(lines, core, PC_X0 + col * PC_DX, PC_Y["ccd1_t0"])
+    # CCD1 T1: logical 24-31 → col 0-7
+    for col, core in enumerate(range(24, 32)):
+        _core_bar(lines, core, PC_X0 + col * PC_DX, PC_Y["ccd1_t1"])
     return "\n".join(lines)
 
 
-# --- helpers ---------------------------------------------------------------
+def _core_bar(lines, core, x, y):
+    lines += [
+        f"    CpuCore{core:02d}:",
+        f"      GRAPH:",
+        f"        SHOW: True",
+        f"        X: {x}",
+        f"        Y: {y}",
+        f"        WIDTH: {PC_W}",
+        f"        HEIGHT: {PC_H}",
+        f"        MIN_VALUE: 0",
+        f"        MAX_VALUE: 100",
+        f"        BAR_COLOR: {ACCENT}",
+        f"        BAR_OUTLINE: False",
+        f"        BACKGROUND_COLOR: {BAR_BG}",
+    ]
+
+
+# --- custom sensor stanzas (MemUsedGB, MemTotalGB, DiskReadMBs, etc.) ------
+# --- helpers for built-in sensors ------------------------------------------
 def text(*, x, y, font, size, color, anchor="lt", show_unit=True, indent=8):
     pad = " " * indent
     return dedent(f"""\
@@ -105,7 +130,106 @@ def linegraph(*, x, y, w, h, min_v=0, max_v=100, autoscale=False,
         BACKGROUND_IMAGE: {BG}""").replace("\n", "\n" + pad)
 
 
-# --- theme body ------------------------------------------------------------
+# ===========================================================================
+# CUSTOM sensors block — each sensor name appears exactly once
+# ===========================================================================
+
+def _ctext(x, y, font, size, color, anchor="lt"):
+    return dedent(f"""\
+        SHOW: True
+        SHOW_UNIT: False
+        X: {x}
+        Y: {y}
+        FONT: {font}
+        FONT_SIZE: {size}
+        FONT_COLOR: {color}
+        BACKGROUND_IMAGE: {BG}
+        ANCHOR: {anchor}""").replace("\n", "\n        ")
+
+
+def _cgraph(x, y, w, h, max_v, color=ACCENT):
+    return dedent(f"""\
+        SHOW: True
+        X: {x}
+        Y: {y}
+        WIDTH: {w}
+        HEIGHT: {h}
+        MIN_VALUE: 0
+        MAX_VALUE: {max_v}
+        BAR_COLOR: {color}
+        BAR_OUTLINE: False
+        BACKGROUND_COLOR: {BAR_BG}""").replace("\n", "\n        ")
+
+
+def _cline(x, y, w, h, autoscale=True, color=GRAPH_LINE):
+    return dedent(f"""\
+        SHOW: True
+        X: {x}
+        Y: {y}
+        WIDTH: {w}
+        HEIGHT: {h}
+        MIN_VALUE: 0
+        MAX_VALUE: 100
+        HISTORY_SIZE: 120
+        AUTOSCALE: {autoscale}
+        LINE_COLOR: {color}
+        LINE_WIDTH: 2
+        AXIS: False
+        BACKGROUND_IMAGE: {BG}""").replace("\n", "\n        ")
+
+
+CUSTOM_BLOCK = f"""  CUSTOM:
+    INTERVAL: 1
+
+    # Memory GB (framework hardcodes MB; these show GB at 1 d.p.)
+    MemUsedGB:
+      TEXT:
+        {_ctext(20, 1050, FONT_BOLD, 32, ACCENT)}
+    MemTotalGB:
+      TEXT:
+        {_ctext(460, 1055, FONT_REG, 22, TXT_DIM, anchor="rt")}
+
+    # Disk I/O speeds with history line graphs
+    DiskReadMBs:
+      TEXT:
+        {_ctext(460, 1396, FONT_BOLD, 22, ACCENT, anchor="rt")}
+      LINE_GRAPH:
+        {_cline(20, 1420, 440, 40)}
+    DiskWriteMBs:
+      TEXT:
+        {_ctext(460, 1464, FONT_BOLD, 22, ACCENT_DIM, anchor="rt")}
+      LINE_GRAPH:
+        {_cline(20, 1488, 440, 24, color=ACCENT_DIM)}
+
+    # Power (GPU via pynvml; CPU via amdgpu hwmon PPT)
+    GpuPowerW:
+      TEXT:
+        {_ctext(460, 1564, FONT_BOLD, 28, TXT, anchor="rt")}
+      GRAPH:
+        {_cgraph(20, 1600, 440, 18, max_v=170)}
+    CpuPowerW:
+      TEXT:
+        {_ctext(460, 1630, FONT_BOLD, 28, TXT, anchor="rt")}
+      GRAPH:
+        {_cgraph(20, 1642, 440, 16, max_v=170)}"""
+
+
+def percore_lines() -> str:
+    """Generate CCD-grouped per-core bar entries at correct 4-space indent."""
+    lines = []
+    for col, core in enumerate(range(0, 8)):
+        _core_bar(lines, core, PC_X0 + col * PC_DX, PC_Y["ccd0_t0"])
+    for col, core in enumerate(range(16, 24)):
+        _core_bar(lines, core, PC_X0 + col * PC_DX, PC_Y["ccd0_t1"])
+    for col, core in enumerate(range(8, 16)):
+        _core_bar(lines, core, PC_X0 + col * PC_DX, PC_Y["ccd1_t0"])
+    for col, core in enumerate(range(24, 32)):
+        _core_bar(lines, core, PC_X0 + col * PC_DX, PC_Y["ccd1_t1"])
+    # _core_bar puts lines like "    CpuCoreXX:" (4-space indent) — correct
+    return "\n".join(lines)
+
+
+# ===========================================================================
 THEME = f"""---
 # MinimalDark88 — clean dark portrait theme for 8.8" Turing displays (480×1920).
 # Generated by _gen_theme.py. Edit constants there, not here.
@@ -138,96 +262,101 @@ STATS:
       TEXT:
         {text(x=460, y=42, font=FONT_REG, size=18, color=TXT_DIM, anchor="rt")}
 
-  # ── CPU ──────────────────────────────────────────────────────────────────
+  # ── CPU  (card 82..640, HDR_H=36, divider at 118) ────────────────────────
   CPU:
     PERCENTAGE:
       INTERVAL: 1
       TEXT:
         {text(x=460, y=130, font=FONT_BOLD, size=44, color=TXT, anchor="rt")}
       GRAPH:
-        {bar(x=20, y=245, w=440, h=22)}
+        {bar(x=20, y=248, w=440, h=22)}
       LINE_GRAPH:
-        {linegraph(x=20, y=358, w=440, h=130, autoscale=False)}
+        {linegraph(x=20, y=462, w=440, h=160, autoscale=False)}
     TEMPERATURE:
       INTERVAL: 1
       TEXT:
-        {text(x=20, y=125, font=FONT_EBOLD, size=58, color=TXT)}
+        {text(x=20, y=126, font=FONT_EBOLD, size=58, color=TXT)}
     FREQUENCY:
       INTERVAL: 2
       TEXT:
-        {text(x=20, y=200, font=FONT_BOLD, size=28, color=ACCENT)}
+        {text(x=20, y=202, font=FONT_BOLD, size=28, color=ACCENT)}
     FAN_SPEED:
       INTERVAL: 5
       TEXT:
-        {text(x=460, y=205, font=FONT_REG, size=20, color=TXT_DIM, anchor="rt")}
+        {text(x=460, y=207, font=FONT_REG, size=20, color=TXT_DIM, anchor="rt")}
 
-  # ── GPU ──────────────────────────────────────────────────────────────────
-  # GPU card yt=582, HDR_H=36 → divider at 618; content starts at 626+
+  # ── GPU  (card 644..1000, HDR_H=36, divider at 680) ──────────────────────
+  # GPU% and VRAM% line graphs are side-by-side, labelled in background.png
   GPU:
     INTERVAL: 1
     PERCENTAGE:
       TEXT:
-        {text(x=460, y=630, font=FONT_BOLD, size=44, color=TXT, anchor="rt")}
+        {text(x=460, y=693, font=FONT_BOLD, size=44, color=TXT, anchor="rt")}
       GRAPH:
-        {bar(x=20, y=745, w=440, h=22)}
+        {bar(x=20, y=800, w=440, h=22)}
       LINE_GRAPH:
-        {linegraph(x=20, y=832, w=440, h=130, autoscale=False)}
+        {linegraph(x=20, y=866, w=210, h=100, autoscale=False)}
     TEMPERATURE:
       TEXT:
-        {text(x=20, y=625, font=FONT_EBOLD, size=58, color=TXT)}
+        {text(x=20, y=688, font=FONT_EBOLD, size=58, color=TXT)}
     MEMORY_PERCENT:
       GRAPH:
-        {bar(x=20, y=775, w=440, h=14, color=ACCENT_DIM)}
+        {bar(x=20, y=830, w=440, h=14, color=ACCENT_DIM)}
+      LINE_GRAPH:
+        {linegraph(x=250, y=866, w=210, h=100, autoscale=False, color=ACCENT_DIM)}
     MEMORY_USED:
       TEXT:
-        {text(x=20, y=697, font=FONT_REG, size=22, color=TXT_DIM)}
+        {text(x=20, y=758, font=FONT_REG, size=22, color=TXT_DIM)}
     MEMORY_TOTAL:
       TEXT:
-        {text(x=460, y=697, font=FONT_REG, size=22, color=TXT_DIM, anchor="rt")}
+        {text(x=460, y=758, font=FONT_REG, size=22, color=TXT_DIM, anchor="rt")}
 
-  # ── MEMORY ───────────────────────────────────────────────────────────────
-  # MEM card yt=1022, HDR_H=36 → divider at 1058; content starts at 1063+
+  # ── MEMORY  (card 1004..1230, HDR_H=36, divider at 1040) ─────────────────
+  # MemUsedGB / MemTotalGB shown via CUSTOM sensors; built-in USED/TOTAL hidden.
   MEMORY:
     INTERVAL: 5
     VIRTUAL:
       PERCENT_TEXT:
-        {text(x=460, y=1063, font=FONT_BOLD, size=44, color=TXT, anchor="rt")}
+        {text(x=460, y=1048, font=FONT_BOLD, size=44, color=TXT, anchor="rt")}
       GRAPH:
-        {bar(x=20, y=1123, w=440, h=22)}
+        {bar(x=20, y=1110, w=440, h=22)}
+      LINE_GRAPH:
+        {linegraph(x=20, y=1146, w=440, h=72, autoscale=False)}
       USED:
-        {text(x=20, y=1156, font=FONT_REG, size=20, color=TXT_DIM)}
+        SHOW: False
+      FREE:
+        SHOW: False
       TOTAL:
-        {text(x=460, y=1156, font=FONT_REG, size=20, color=TXT_DIM, anchor="rt")}
+        SHOW: False
 
-  # ── DISK ─────────────────────────────────────────────────────────────────
-  # DISK card yt=1272, HDR_H=36 → divider at 1308; content starts at 1313+
+  # ── DISK  (card 1234..1520, HDR_H=36, divider at 1270) ───────────────────
+  # DiskReadMBs / DiskWriteMBs shown via CUSTOM sensors below.
   DISK:
     INTERVAL: 10
     USED:
       PERCENT_TEXT:
-        {text(x=460, y=1313, font=FONT_BOLD, size=44, color=TXT, anchor="rt")}
+        {text(x=460, y=1278, font=FONT_BOLD, size=44, color=TXT, anchor="rt")}
       GRAPH:
-        {bar(x=20, y=1373, w=440, h=22)}
+        {bar(x=20, y=1338, w=440, h=22)}
       TEXT:
-        {text(x=20, y=1406, font=FONT_REG, size=20, color=TXT_DIM)}
+        {text(x=20, y=1372, font=FONT_REG, size=20, color=TXT_DIM)}
     TOTAL:
       TEXT:
-        {text(x=460, y=1406, font=FONT_REG, size=20, color=TXT_DIM, anchor="rt")}
+        {text(x=460, y=1372, font=FONT_REG, size=20, color=TXT_DIM, anchor="rt")}
 
-  # ── NETWORK ──────────────────────────────────────────────────────────────
-  # NET card yt=1522, HDR_H=36 → divider at 1558; content starts at 1562+
+  # ── NET  (card 1670..1918, HDR_H=36, divider at 1706) ────────────────────
   NET:
     INTERVAL: 2
     ETH:
       DOWNLOAD:
         TEXT:
-          {text(x=460, y=1562, font=FONT_BOLD, size=22, color=ACCENT, anchor="rt", indent=10)}
+          {text(x=460, y=1710, font=FONT_BOLD, size=22, color=ACCENT, anchor="rt", indent=10)}
         LINE_GRAPH:
           SHOW: True
           X: 20
-          Y: 1596
+          Y: 1732
           WIDTH: 440
-          HEIGHT: 140
+          HEIGHT: 80
           MIN_VALUE: 0
           MAX_VALUE: 1000000
           HISTORY_SIZE: 120
@@ -238,13 +367,13 @@ STATS:
           BACKGROUND_IMAGE: {BG}
       UPLOAD:
         TEXT:
-          {text(x=460, y=1748, font=FONT_BOLD, size=22, color=ACCENT, anchor="rt", indent=10)}
+          {text(x=460, y=1820, font=FONT_BOLD, size=22, color=ACCENT, anchor="rt", indent=10)}
         LINE_GRAPH:
           SHOW: True
           X: 20
-          Y: 1782
+          Y: 1842
           WIDTH: 440
-          HEIGHT: 130
+          HEIGHT: 70
           MIN_VALUE: 0
           MAX_VALUE: 1000000
           HISTORY_SIZE: 120
@@ -254,7 +383,8 @@ STATS:
           AXIS: False
           BACKGROUND_IMAGE: {BG}
 
-{percore_block()}
+{CUSTOM_BLOCK}
+{percore_lines()}
 """
 
 
