@@ -25,8 +25,7 @@ BG = "background.png"
 #  GPU   644..1000
 #  MEM  1004..1230
 #  DISK 1234..1520
-#  POWER 1524..1666
-#  NET  1670..1918
+#  NET  1524..1918
 
 # --- per-core CCD grid -----------------------------------------------------
 # 9950X3D: 2 CCDs, 8 cores each, 2 HT threads → 4 rows of 8
@@ -181,6 +180,22 @@ def _cline(x, y, w, h, autoscale=True, color=GRAPH_LINE):
 CUSTOM_BLOCK = f"""  CUSTOM:
     INTERVAL: 1
 
+    # Power — text only, positioned in each card's header band
+    CpuPowerW:
+      TEXT:
+        {_ctext(460, 90, FONT_BOLD, 20, ACCENT_DIM, anchor="rt")}
+    GpuPowerW:
+      TEXT:
+        {_ctext(460, 652, FONT_BOLD, 20, ACCENT_DIM, anchor="rt")}
+
+    # GPU memory in GB (replaces built-in MB readout)
+    GpuMemUsedGB:
+      TEXT:
+        {_ctext(20, 758, FONT_REG, 22, TXT_DIM)}
+    GpuMemTotalGB:
+      TEXT:
+        {_ctext(460, 758, FONT_REG, 22, TXT_DIM, anchor="rt")}
+
     # Memory GB (framework hardcodes MB; these show GB at 1 d.p.)
     MemUsedGB:
       TEXT:
@@ -199,19 +214,7 @@ CUSTOM_BLOCK = f"""  CUSTOM:
       TEXT:
         {_ctext(460, 1464, FONT_BOLD, 22, ACCENT_DIM, anchor="rt")}
       LINE_GRAPH:
-        {_cline(20, 1488, 440, 24, color=ACCENT_DIM)}
-
-    # Power (GPU via pynvml; CPU via amdgpu hwmon PPT)
-    GpuPowerW:
-      TEXT:
-        {_ctext(460, 1564, FONT_BOLD, 28, TXT, anchor="rt")}
-      GRAPH:
-        {_cgraph(20, 1600, 440, 18, max_v=170)}
-    CpuPowerW:
-      TEXT:
-        {_ctext(460, 1630, FONT_BOLD, 28, TXT, anchor="rt")}
-      GRAPH:
-        {_cgraph(20, 1642, 440, 16, max_v=170)}"""
+        {_cline(20, 1488, 440, 24, color=ACCENT_DIM)}"""
 
 
 def percore_lines() -> str:
@@ -281,12 +284,12 @@ STATS:
       TEXT:
         {text(x=20, y=202, font=FONT_BOLD, size=28, color=ACCENT)}
     FAN_SPEED:
-      INTERVAL: 5
+      INTERVAL: 2
       TEXT:
         {text(x=460, y=207, font=FONT_REG, size=20, color=TXT_DIM, anchor="rt")}
 
   # ── GPU  (card 644..1000, HDR_H=36, divider at 680) ──────────────────────
-  # GPU% and VRAM% line graphs are side-by-side, labelled in background.png
+  # GpuPowerW in header, GpuMemUsedGB/TotalGB via CUSTOM (built-ins hidden)
   GPU:
     INTERVAL: 1
     PERCENTAGE:
@@ -295,26 +298,22 @@ STATS:
       GRAPH:
         {bar(x=20, y=800, w=440, h=22)}
       LINE_GRAPH:
-        {linegraph(x=20, y=866, w=210, h=100, autoscale=False)}
+        {linegraph(x=20, y=866, w=440, h=100, autoscale=False)}
     TEMPERATURE:
       TEXT:
         {text(x=20, y=688, font=FONT_EBOLD, size=58, color=TXT)}
     MEMORY_PERCENT:
       GRAPH:
         {bar(x=20, y=830, w=440, h=14, color=ACCENT_DIM)}
-      LINE_GRAPH:
-        {linegraph(x=250, y=866, w=210, h=100, autoscale=False, color=ACCENT_DIM)}
     MEMORY_USED:
-      TEXT:
-        {text(x=20, y=758, font=FONT_REG, size=22, color=TXT_DIM)}
+      SHOW: False
     MEMORY_TOTAL:
-      TEXT:
-        {text(x=460, y=758, font=FONT_REG, size=22, color=TXT_DIM, anchor="rt")}
+      SHOW: False
 
   # ── MEMORY  (card 1004..1230, HDR_H=36, divider at 1040) ─────────────────
   # MemUsedGB / MemTotalGB shown via CUSTOM sensors; built-in USED/TOTAL hidden.
   MEMORY:
-    INTERVAL: 5
+    INTERVAL: 2
     VIRTUAL:
       PERCENT_TEXT:
         {text(x=460, y=1048, font=FONT_BOLD, size=44, color=TXT, anchor="rt")}
@@ -344,19 +343,19 @@ STATS:
       TEXT:
         {text(x=460, y=1372, font=FONT_REG, size=20, color=TXT_DIM, anchor="rt")}
 
-  # ── NET  (card 1670..1918, HDR_H=36, divider at 1706) ────────────────────
+  # ── NET  (card 1524..1918, HDR_H=36, divider at 1560) ────────────────────
   NET:
-    INTERVAL: 2
+    INTERVAL: 1
     ETH:
       DOWNLOAD:
         TEXT:
-          {text(x=460, y=1710, font=FONT_BOLD, size=22, color=ACCENT, anchor="rt", indent=10)}
+          {text(x=460, y=1563, font=FONT_BOLD, size=22, color=ACCENT, anchor="rt", indent=10)}
         LINE_GRAPH:
           SHOW: True
           X: 20
-          Y: 1732
+          Y: 1580
           WIDTH: 440
-          HEIGHT: 80
+          HEIGHT: 150
           MIN_VALUE: 0
           MAX_VALUE: 1000000
           HISTORY_SIZE: 120
@@ -367,13 +366,13 @@ STATS:
           BACKGROUND_IMAGE: {BG}
       UPLOAD:
         TEXT:
-          {text(x=460, y=1820, font=FONT_BOLD, size=22, color=ACCENT, anchor="rt", indent=10)}
+          {text(x=460, y=1737, font=FONT_BOLD, size=22, color=ACCENT, anchor="rt", indent=10)}
         LINE_GRAPH:
           SHOW: True
           X: 20
-          Y: 1842
+          Y: 1753
           WIDTH: 440
-          HEIGHT: 70
+          HEIGHT: 150
           MIN_VALUE: 0
           MAX_VALUE: 1000000
           HISTORY_SIZE: 120

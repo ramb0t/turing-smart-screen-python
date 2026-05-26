@@ -118,7 +118,7 @@ STATS:
         BACKGROUND_IMAGE: background.png
         ANCHOR: lt
     FAN_SPEED:
-      INTERVAL: 5
+      INTERVAL: 2
       TEXT:
         SHOW: True
         SHOW_UNIT: True
@@ -131,7 +131,7 @@ STATS:
         ANCHOR: rt
 
   # ── GPU  (card 644..1000, HDR_H=36, divider at 680) ──────────────────────
-  # GPU% and VRAM% line graphs are side-by-side, labelled in background.png
+  # GpuPowerW in header, GpuMemUsedGB/TotalGB via CUSTOM (built-ins hidden)
   GPU:
     INTERVAL: 1
     PERCENTAGE:
@@ -160,7 +160,7 @@ STATS:
         SHOW: True
         X: 20
         Y: 866
-        WIDTH: 210
+        WIDTH: 440
         HEIGHT: 100
         MIN_VALUE: 0
         MAX_VALUE: 100
@@ -193,47 +193,15 @@ STATS:
         BAR_COLOR: 70, 130, 160
         BAR_OUTLINE: False
         BACKGROUND_COLOR: 32, 35, 42
-      LINE_GRAPH:
-        SHOW: True
-        X: 250
-        Y: 866
-        WIDTH: 210
-        HEIGHT: 100
-        MIN_VALUE: 0
-        MAX_VALUE: 100
-        HISTORY_SIZE: 120
-        AUTOSCALE: False
-        LINE_COLOR: 70, 130, 160
-        LINE_WIDTH: 2
-        AXIS: False
-        BACKGROUND_IMAGE: background.png
     MEMORY_USED:
-      TEXT:
-        SHOW: True
-        SHOW_UNIT: True
-        X: 20
-        Y: 758
-        FONT: jetbrains-mono/JetBrainsMono-Regular.ttf
-        FONT_SIZE: 22
-        FONT_COLOR: 140, 144, 153
-        BACKGROUND_IMAGE: background.png
-        ANCHOR: lt
+      SHOW: False
     MEMORY_TOTAL:
-      TEXT:
-        SHOW: True
-        SHOW_UNIT: True
-        X: 460
-        Y: 758
-        FONT: jetbrains-mono/JetBrainsMono-Regular.ttf
-        FONT_SIZE: 22
-        FONT_COLOR: 140, 144, 153
-        BACKGROUND_IMAGE: background.png
-        ANCHOR: rt
+      SHOW: False
 
   # ── MEMORY  (card 1004..1230, HDR_H=36, divider at 1040) ─────────────────
   # MemUsedGB / MemTotalGB shown via CUSTOM sensors; built-in USED/TOTAL hidden.
   MEMORY:
-    INTERVAL: 5
+    INTERVAL: 2
     VIRTUAL:
       PERCENT_TEXT:
         SHOW: True
@@ -325,16 +293,16 @@ STATS:
         BACKGROUND_IMAGE: background.png
         ANCHOR: rt
 
-  # ── NET  (card 1670..1918, HDR_H=36, divider at 1706) ────────────────────
+  # ── NET  (card 1524..1918, HDR_H=36, divider at 1560) ────────────────────
   NET:
-    INTERVAL: 2
+    INTERVAL: 1
     ETH:
       DOWNLOAD:
         TEXT:
           SHOW: True
           SHOW_UNIT: True
           X: 460
-          Y: 1710
+          Y: 1563
           FONT: jetbrains-mono/JetBrainsMono-Bold.ttf
           FONT_SIZE: 22
           FONT_COLOR: 95, 179, 214
@@ -343,9 +311,9 @@ STATS:
         LINE_GRAPH:
           SHOW: True
           X: 20
-          Y: 1732
+          Y: 1580
           WIDTH: 440
-          HEIGHT: 80
+          HEIGHT: 150
           MIN_VALUE: 0
           MAX_VALUE: 1000000
           HISTORY_SIZE: 120
@@ -359,7 +327,7 @@ STATS:
           SHOW: True
           SHOW_UNIT: True
           X: 460
-          Y: 1820
+          Y: 1737
           FONT: jetbrains-mono/JetBrainsMono-Bold.ttf
           FONT_SIZE: 22
           FONT_COLOR: 95, 179, 214
@@ -368,9 +336,9 @@ STATS:
         LINE_GRAPH:
           SHOW: True
           X: 20
-          Y: 1842
+          Y: 1753
           WIDTH: 440
-          HEIGHT: 70
+          HEIGHT: 150
           MIN_VALUE: 0
           MAX_VALUE: 1000000
           HISTORY_SIZE: 120
@@ -382,6 +350,54 @@ STATS:
 
   CUSTOM:
     INTERVAL: 1
+
+    # Power — text only, positioned in each card's header band
+    CpuPowerW:
+      TEXT:
+        SHOW: True
+        SHOW_UNIT: False
+        X: 460
+        Y: 90
+        FONT: jetbrains-mono/JetBrainsMono-Bold.ttf
+        FONT_SIZE: 20
+        FONT_COLOR: 70, 130, 160
+        BACKGROUND_IMAGE: background.png
+        ANCHOR: rt
+    GpuPowerW:
+      TEXT:
+        SHOW: True
+        SHOW_UNIT: False
+        X: 460
+        Y: 652
+        FONT: jetbrains-mono/JetBrainsMono-Bold.ttf
+        FONT_SIZE: 20
+        FONT_COLOR: 70, 130, 160
+        BACKGROUND_IMAGE: background.png
+        ANCHOR: rt
+
+    # GPU memory in GB (replaces built-in MB readout)
+    GpuMemUsedGB:
+      TEXT:
+        SHOW: True
+        SHOW_UNIT: False
+        X: 20
+        Y: 758
+        FONT: jetbrains-mono/JetBrainsMono-Regular.ttf
+        FONT_SIZE: 22
+        FONT_COLOR: 140, 144, 153
+        BACKGROUND_IMAGE: background.png
+        ANCHOR: lt
+    GpuMemTotalGB:
+      TEXT:
+        SHOW: True
+        SHOW_UNIT: False
+        X: 460
+        Y: 758
+        FONT: jetbrains-mono/JetBrainsMono-Regular.ttf
+        FONT_SIZE: 22
+        FONT_COLOR: 140, 144, 153
+        BACKGROUND_IMAGE: background.png
+        ANCHOR: rt
 
     # Memory GB (framework hardcodes MB; these show GB at 1 d.p.)
     MemUsedGB:
@@ -458,52 +474,6 @@ STATS:
         LINE_WIDTH: 2
         AXIS: False
         BACKGROUND_IMAGE: background.png
-
-    # Power (GPU via pynvml; CPU via amdgpu hwmon PPT)
-    GpuPowerW:
-      TEXT:
-        SHOW: True
-        SHOW_UNIT: False
-        X: 460
-        Y: 1564
-        FONT: jetbrains-mono/JetBrainsMono-Bold.ttf
-        FONT_SIZE: 28
-        FONT_COLOR: 224, 226, 230
-        BACKGROUND_IMAGE: background.png
-        ANCHOR: rt
-      GRAPH:
-        SHOW: True
-        X: 20
-        Y: 1600
-        WIDTH: 440
-        HEIGHT: 18
-        MIN_VALUE: 0
-        MAX_VALUE: 170
-        BAR_COLOR: 95, 179, 214
-        BAR_OUTLINE: False
-        BACKGROUND_COLOR: 32, 35, 42
-    CpuPowerW:
-      TEXT:
-        SHOW: True
-        SHOW_UNIT: False
-        X: 460
-        Y: 1630
-        FONT: jetbrains-mono/JetBrainsMono-Bold.ttf
-        FONT_SIZE: 28
-        FONT_COLOR: 224, 226, 230
-        BACKGROUND_IMAGE: background.png
-        ANCHOR: rt
-      GRAPH:
-        SHOW: True
-        X: 20
-        Y: 1642
-        WIDTH: 440
-        HEIGHT: 16
-        MIN_VALUE: 0
-        MAX_VALUE: 170
-        BAR_COLOR: 95, 179, 214
-        BAR_OUTLINE: False
-        BACKGROUND_COLOR: 32, 35, 42
     CpuCore00:
       GRAPH:
         SHOW: True

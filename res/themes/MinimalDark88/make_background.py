@@ -33,8 +33,7 @@ cards = [
     (644,  1000, "GPU",   "NVIDIA RTX 3060"),
     (1004, 1230, "MEM",   None),
     (1234, 1520, "DISK",  None),
-    (1524, 1666, "POWER", None),
-    (1670, 1918, "NET",   None),
+    (1524, 1918, "NET",   None),
 ]
 
 for (yt, yb, label, sub) in cards:
@@ -54,10 +53,8 @@ d.rectangle([(MARGIN, 2), (MARGIN + 4, 78)], fill=ACCENT)
 d.text((PAD_X, 280), "CCD0", font=F_LABEL, fill=ACCENT)
 d.text((PAD_X, 370), "CCD1", font=F_LABEL, fill=ACCENT_DIM)
 
-# ── GPU graph labels ────────────────────────────────────────────────────────
-# Side-by-side line graphs: left = GPU UTIL %, right = VRAM %
+# ── GPU graph label ─────────────────────────────────────────────────────────
 d.text((PAD_X, 852), "GPU UTIL %", font=F_SUB, fill=SUBTLE)
-d.text((252,   852), "VRAM %",     font=F_SUB, fill=SUBTLE)
 
 # ── MEM section sub-label ───────────────────────────────────────────────────
 d.text((PAD_X, 1044), "used", font=F_SUB, fill=SUBTLE)
@@ -66,13 +63,9 @@ d.text((PAD_X, 1044), "used", font=F_SUB, fill=SUBTLE)
 d.text((PAD_X, 1394), "READ  MB/s",  font=F_SUB, fill=SUBTLE)
 d.text((PAD_X, 1462), "WRITE MB/s", font=F_SUB, fill=SUBTLE)
 
-# ── POWER section labels ────────────────────────────────────────────────────
-d.text((PAD_X, 1562), "GPU  W", font=F_LABEL, fill=ACCENT)
-d.text((PAD_X, 1628), "CPU  W", font=F_LABEL, fill=ACCENT)
-
 # ── NET labels ──────────────────────────────────────────────────────────────
-d.text((PAD_X, 1708), "ETH  ↓", font=F_SUB, fill=SUBTLE)
-d.text((PAD_X, 1818), "ETH  ↑", font=F_SUB, fill=SUBTLE)
+d.text((PAD_X, 1562), "ETH  ↓", font=F_SUB, fill=SUBTLE)
+d.text((PAD_X, 1736), "ETH  ↑", font=F_SUB, fill=SUBTLE)
 
 out = Path(__file__).with_name("background.png")
 img.save(out)

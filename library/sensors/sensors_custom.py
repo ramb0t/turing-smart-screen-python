@@ -119,7 +119,7 @@ class MemUsedGB(CustomDataSource):
         return psutil.virtual_memory().used / 1_073_741_824  # bytes → GiB
 
     def as_string(self) -> str:
-        return f"{self.as_numeric():.1f}"
+        return f"{self.as_numeric():.1f} GB"
 
     def last_values(self) -> List[float]:
         return []
@@ -130,7 +130,7 @@ class MemTotalGB(CustomDataSource):
         return psutil.virtual_memory().total / 1_073_741_824
 
     def as_string(self) -> str:
-        return f"{self.as_numeric():.1f}"
+        return f"{self.as_numeric():.1f} GB"
 
     def last_values(self) -> List[float]:
         return []
@@ -247,7 +247,7 @@ class GpuPowerW(CustomDataSource):
 
     def as_string(self) -> str:
         v = self.as_numeric()
-        return f"{v:.0f}" if not math.isnan(v) else "N/A"
+        return f"{v:.0f} W" if not math.isnan(v) else "N/A"
 
     def last_values(self) -> List[float]:
         return []
@@ -278,7 +278,42 @@ class CpuPowerW(CustomDataSource):
 
     def as_string(self) -> str:
         v = self.as_numeric()
-        return f"{v:.0f}" if not math.isnan(v) else "N/A"
+        return f"{v:.0f} W" if not math.isnan(v) else "N/A"
+
+    def last_values(self) -> List[float]:
+        return []
+
+
+# --- GPU memory in GB (GpuMemUsedGB, GpuMemTotalGB) ---
+class GpuMemUsedGB(CustomDataSource):
+    def as_numeric(self) -> float:
+        if not _NVML_OK:
+            return math.nan
+        try:
+            return _nvml.nvmlDeviceGetMemoryInfo(_NVML_HANDLE).used / 1_073_741_824
+        except Exception:
+            return math.nan
+
+    def as_string(self) -> str:
+        v = self.as_numeric()
+        return f"{v:.1f} GB" if not math.isnan(v) else "N/A"
+
+    def last_values(self) -> List[float]:
+        return []
+
+
+class GpuMemTotalGB(CustomDataSource):
+    def as_numeric(self) -> float:
+        if not _NVML_OK:
+            return math.nan
+        try:
+            return _nvml.nvmlDeviceGetMemoryInfo(_NVML_HANDLE).total / 1_073_741_824
+        except Exception:
+            return math.nan
+
+    def as_string(self) -> str:
+        v = self.as_numeric()
+        return f"{v:.1f} GB" if not math.isnan(v) else "N/A"
 
     def last_values(self) -> List[float]:
         return []
