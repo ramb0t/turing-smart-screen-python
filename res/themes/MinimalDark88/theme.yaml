@@ -131,6 +131,7 @@ STATS:
         ANCHOR: rt
 
   # ── GPU ──────────────────────────────────────────────────────────────────
+  # GPU card yt=582, HDR_H=36 → divider at 618; content starts at 626+
   GPU:
     INTERVAL: 1
     PERCENTAGE:
@@ -138,7 +139,7 @@ STATS:
         SHOW: True
         SHOW_UNIT: True
         X: 460
-        Y: 610
+        Y: 630
         FONT: jetbrains-mono/JetBrainsMono-Bold.ttf
         FONT_SIZE: 44
         FONT_COLOR: 224, 226, 230
@@ -147,7 +148,7 @@ STATS:
       GRAPH:
         SHOW: True
         X: 20
-        Y: 725
+        Y: 745
         WIDTH: 440
         HEIGHT: 22
         MIN_VALUE: 0
@@ -158,7 +159,7 @@ STATS:
       LINE_GRAPH:
         SHOW: True
         X: 20
-        Y: 810
+        Y: 832
         WIDTH: 440
         HEIGHT: 130
         MIN_VALUE: 0
@@ -174,7 +175,7 @@ STATS:
         SHOW: True
         SHOW_UNIT: True
         X: 20
-        Y: 605
+        Y: 625
         FONT: jetbrains-mono/JetBrainsMono-ExtraBold.ttf
         FONT_SIZE: 58
         FONT_COLOR: 224, 226, 230
@@ -184,7 +185,7 @@ STATS:
       GRAPH:
         SHOW: True
         X: 20
-        Y: 755
+        Y: 775
         WIDTH: 440
         HEIGHT: 14
         MIN_VALUE: 0
@@ -197,7 +198,7 @@ STATS:
         SHOW: True
         SHOW_UNIT: True
         X: 20
-        Y: 677
+        Y: 697
         FONT: jetbrains-mono/JetBrainsMono-Regular.ttf
         FONT_SIZE: 22
         FONT_COLOR: 140, 144, 153
@@ -208,7 +209,7 @@ STATS:
         SHOW: True
         SHOW_UNIT: True
         X: 460
-        Y: 677
+        Y: 697
         FONT: jetbrains-mono/JetBrainsMono-Regular.ttf
         FONT_SIZE: 22
         FONT_COLOR: 140, 144, 153
@@ -216,6 +217,7 @@ STATS:
         ANCHOR: rt
 
   # ── MEMORY ───────────────────────────────────────────────────────────────
+  # MEM card yt=1022, HDR_H=36 → divider at 1058; content starts at 1063+
   MEMORY:
     INTERVAL: 5
     VIRTUAL:
@@ -223,7 +225,7 @@ STATS:
         SHOW: True
         SHOW_UNIT: True
         X: 460
-        Y: 1055
+        Y: 1063
         FONT: jetbrains-mono/JetBrainsMono-Bold.ttf
         FONT_SIZE: 44
         FONT_COLOR: 224, 226, 230
@@ -232,7 +234,7 @@ STATS:
       GRAPH:
         SHOW: True
         X: 20
-        Y: 1115
+        Y: 1123
         WIDTH: 440
         HEIGHT: 22
         MIN_VALUE: 0
@@ -244,7 +246,7 @@ STATS:
         SHOW: True
         SHOW_UNIT: True
         X: 20
-        Y: 1148
+        Y: 1156
         FONT: jetbrains-mono/JetBrainsMono-Regular.ttf
         FONT_SIZE: 20
         FONT_COLOR: 140, 144, 153
@@ -254,7 +256,7 @@ STATS:
         SHOW: True
         SHOW_UNIT: True
         X: 460
-        Y: 1148
+        Y: 1156
         FONT: jetbrains-mono/JetBrainsMono-Regular.ttf
         FONT_SIZE: 20
         FONT_COLOR: 140, 144, 153
@@ -262,6 +264,7 @@ STATS:
         ANCHOR: rt
 
   # ── DISK ─────────────────────────────────────────────────────────────────
+  # DISK card yt=1272, HDR_H=36 → divider at 1308; content starts at 1313+
   DISK:
     INTERVAL: 10
     USED:
@@ -269,7 +272,7 @@ STATS:
         SHOW: True
         SHOW_UNIT: True
         X: 460
-        Y: 1305
+        Y: 1313
         FONT: jetbrains-mono/JetBrainsMono-Bold.ttf
         FONT_SIZE: 44
         FONT_COLOR: 224, 226, 230
@@ -278,7 +281,7 @@ STATS:
       GRAPH:
         SHOW: True
         X: 20
-        Y: 1365
+        Y: 1373
         WIDTH: 440
         HEIGHT: 22
         MIN_VALUE: 0
@@ -290,7 +293,7 @@ STATS:
         SHOW: True
         SHOW_UNIT: True
         X: 20
-        Y: 1398
+        Y: 1406
         FONT: jetbrains-mono/JetBrainsMono-Regular.ttf
         FONT_SIZE: 20
         FONT_COLOR: 140, 144, 153
@@ -301,7 +304,7 @@ STATS:
         SHOW: True
         SHOW_UNIT: True
         X: 460
-        Y: 1398
+        Y: 1406
         FONT: jetbrains-mono/JetBrainsMono-Regular.ttf
         FONT_SIZE: 20
         FONT_COLOR: 140, 144, 153
@@ -309,6 +312,7 @@ STATS:
         ANCHOR: rt
 
   # ── NETWORK ──────────────────────────────────────────────────────────────
+  # NET card yt=1522, HDR_H=36 → divider at 1558; content starts at 1562+
   NET:
     INTERVAL: 2
     ETH:
@@ -317,7 +321,7 @@ STATS:
           SHOW: True
           SHOW_UNIT: True
           X: 460
-          Y: 1560
+          Y: 1562
           FONT: jetbrains-mono/JetBrainsMono-Bold.ttf
           FONT_SIZE: 22
           FONT_COLOR: 95, 179, 214
@@ -326,7 +330,7 @@ STATS:
         LINE_GRAPH:
           SHOW: True
           X: 20
-          Y: 1594
+          Y: 1596
           WIDTH: 440
           HEIGHT: 140
           MIN_VALUE: 0

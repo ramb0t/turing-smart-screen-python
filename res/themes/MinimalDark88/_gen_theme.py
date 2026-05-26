@@ -162,66 +162,70 @@ STATS:
         {text(x=460, y=205, font=FONT_REG, size=20, color=TXT_DIM, anchor="rt")}
 
   # ── GPU ──────────────────────────────────────────────────────────────────
+  # GPU card yt=582, HDR_H=36 → divider at 618; content starts at 626+
   GPU:
     INTERVAL: 1
     PERCENTAGE:
       TEXT:
-        {text(x=460, y=610, font=FONT_BOLD, size=44, color=TXT, anchor="rt")}
+        {text(x=460, y=630, font=FONT_BOLD, size=44, color=TXT, anchor="rt")}
       GRAPH:
-        {bar(x=20, y=725, w=440, h=22)}
+        {bar(x=20, y=745, w=440, h=22)}
       LINE_GRAPH:
-        {linegraph(x=20, y=810, w=440, h=130, autoscale=False)}
+        {linegraph(x=20, y=832, w=440, h=130, autoscale=False)}
     TEMPERATURE:
       TEXT:
-        {text(x=20, y=605, font=FONT_EBOLD, size=58, color=TXT)}
+        {text(x=20, y=625, font=FONT_EBOLD, size=58, color=TXT)}
     MEMORY_PERCENT:
       GRAPH:
-        {bar(x=20, y=755, w=440, h=14, color=ACCENT_DIM)}
+        {bar(x=20, y=775, w=440, h=14, color=ACCENT_DIM)}
     MEMORY_USED:
       TEXT:
-        {text(x=20, y=677, font=FONT_REG, size=22, color=TXT_DIM)}
+        {text(x=20, y=697, font=FONT_REG, size=22, color=TXT_DIM)}
     MEMORY_TOTAL:
       TEXT:
-        {text(x=460, y=677, font=FONT_REG, size=22, color=TXT_DIM, anchor="rt")}
+        {text(x=460, y=697, font=FONT_REG, size=22, color=TXT_DIM, anchor="rt")}
 
   # ── MEMORY ───────────────────────────────────────────────────────────────
+  # MEM card yt=1022, HDR_H=36 → divider at 1058; content starts at 1063+
   MEMORY:
     INTERVAL: 5
     VIRTUAL:
       PERCENT_TEXT:
-        {text(x=460, y=1055, font=FONT_BOLD, size=44, color=TXT, anchor="rt")}
+        {text(x=460, y=1063, font=FONT_BOLD, size=44, color=TXT, anchor="rt")}
       GRAPH:
-        {bar(x=20, y=1115, w=440, h=22)}
+        {bar(x=20, y=1123, w=440, h=22)}
       USED:
-        {text(x=20, y=1148, font=FONT_REG, size=20, color=TXT_DIM)}
+        {text(x=20, y=1156, font=FONT_REG, size=20, color=TXT_DIM)}
       TOTAL:
-        {text(x=460, y=1148, font=FONT_REG, size=20, color=TXT_DIM, anchor="rt")}
+        {text(x=460, y=1156, font=FONT_REG, size=20, color=TXT_DIM, anchor="rt")}
 
   # ── DISK ─────────────────────────────────────────────────────────────────
+  # DISK card yt=1272, HDR_H=36 → divider at 1308; content starts at 1313+
   DISK:
     INTERVAL: 10
     USED:
       PERCENT_TEXT:
-        {text(x=460, y=1305, font=FONT_BOLD, size=44, color=TXT, anchor="rt")}
+        {text(x=460, y=1313, font=FONT_BOLD, size=44, color=TXT, anchor="rt")}
       GRAPH:
-        {bar(x=20, y=1365, w=440, h=22)}
+        {bar(x=20, y=1373, w=440, h=22)}
       TEXT:
-        {text(x=20, y=1398, font=FONT_REG, size=20, color=TXT_DIM)}
+        {text(x=20, y=1406, font=FONT_REG, size=20, color=TXT_DIM)}
     TOTAL:
       TEXT:
-        {text(x=460, y=1398, font=FONT_REG, size=20, color=TXT_DIM, anchor="rt")}
+        {text(x=460, y=1406, font=FONT_REG, size=20, color=TXT_DIM, anchor="rt")}
 
   # ── NETWORK ──────────────────────────────────────────────────────────────
+  # NET card yt=1522, HDR_H=36 → divider at 1558; content starts at 1562+
   NET:
     INTERVAL: 2
     ETH:
       DOWNLOAD:
         TEXT:
-          {text(x=460, y=1560, font=FONT_BOLD, size=22, color=ACCENT, anchor="rt", indent=10)}
+          {text(x=460, y=1562, font=FONT_BOLD, size=22, color=ACCENT, anchor="rt", indent=10)}
         LINE_GRAPH:
           SHOW: True
           X: 20
-          Y: 1594
+          Y: 1596
           WIDTH: 440
           HEIGHT: 140
           MIN_VALUE: 0

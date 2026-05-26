@@ -7,8 +7,8 @@ from pathlib import Path
 
 W, H = 480, 1920
 BG      = (14, 15, 18)
-BORDER  = (62, 68, 82)       # card outline
-DIVIDER = (38, 42, 52)       # header-bar underline inside each card
+BORDER  = (95, 110, 138)     # card outline
+DIVIDER = (50, 56, 70)       # header-bar underline inside each card
 ACCENT  = (95, 179, 214)
 SUBTLE  = (90, 94, 102)
 LABEL_C = (140, 144, 153)
@@ -20,10 +20,10 @@ F_SUB     = ImageFont.truetype(str(FONTS / "jetbrains-mono" / "JetBrainsMono-Reg
 img = Image.new("RGB", (W, H), BG)
 d   = ImageDraw.Draw(img)
 
-RADIUS  = 10
-MARGIN  = 6      # gap between screen edge and card
+RADIUS  = 16
+MARGIN  = 8      # gap between screen edge and card
 PAD_X   = 20     # content left margin (matches theme.yaml X=20)
-HDR_H   = 30     # height of the label band inside each card
+HDR_H   = 36     # height of the label band inside each card
 
 # (y_top, y_bottom, label, sub_label)
 cards = [
@@ -41,24 +41,26 @@ for (yt, yb, label, sub) in cards:
         [MARGIN, yt, W - MARGIN, yb],
         radius=RADIUS,
         outline=BORDER,
-        width=1,
+        width=2,
     )
     if label:
         # Thin line under the label row
         line_y = yt + HDR_H
         d.line([(MARGIN + 1, line_y), (W - MARGIN - 1, line_y)], fill=DIVIDER, width=1)
         # Section label
-        d.text((PAD_X, yt + 6), label, font=F_SECTION, fill=ACCENT)
+        d.text((PAD_X, yt + 8), label, font=F_SECTION, fill=ACCENT)
         # Sub-label (hardware name)
         if sub:
-            d.text((PAD_X + 52, yt + 9), sub, font=F_SUB, fill=SUBTLE)
+            d.text((PAD_X + 56, yt + 11), sub, font=F_SUB, fill=SUBTLE)
 
-# NET sub-labels for graph lanes
-d.text((PAD_X, 1558), "ETH  ↓", font=F_SUB, fill=SUBTLE)
-d.text((PAD_X, 1746), "ETH  ↑", font=F_SUB, fill=SUBTLE)
+# NET sub-labels for graph lanes (must clear HDR_H divider at yt+36=1558)
+d.text((PAD_X, 1562), "ETH  ↓", font=F_SUB, fill=SUBTLE)
+d.text((PAD_X, 1750), "ETH  ↑", font=F_SUB, fill=SUBTLE)
 
 # Left accent strip on header card
 d.rectangle([(MARGIN, 2), (MARGIN + 4, 78)], fill=ACCENT)
+# Widen border to 2px on all cards
+
 
 out = Path(__file__).with_name("background.png")
 img.save(out)
