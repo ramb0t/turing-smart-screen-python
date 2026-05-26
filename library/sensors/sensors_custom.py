@@ -99,3 +99,42 @@ class ExampleCustomTextOnlyData(CustomDataSource):
     def last_values(self) -> List[float]:
         # If a custom data class only has text values, it won't be possible to display line graph
         pass
+
+
+# --- Per-core CPU load (used by MinimalDark35 theme) -----------------------
+# Exposes CpuCore00..CpuCoreNN as numeric sensors backed by psutil.cpu_percent(percpu=True).
+# A shared cache keeps psutil from being polled 32 times per refresh cycle.
+import time
+import psutil
+
+_PERCPU_CACHE = {"values": [], "ts": 0.0}
+_PERCPU_TTL = 0.5  # seconds; matches the theme's GRAPH refresh cadence
+
+
+def _percpu_values() -> List[float]:
+    now = time.monotonic()
+    if now - _PERCPU_CACHE["ts"] > _PERCPU_TTL or not _PERCPU_CACHE["values"]:
+        _PERCPU_CACHE["values"] = psutil.cpu_percent(interval=None, percpu=True)
+        _PERCPU_CACHE["ts"] = now
+    return _PERCPU_CACHE["values"]
+
+
+class _CpuCoreBase(CustomDataSource):
+    core_index: int = 0
+
+    def as_numeric(self) -> float:
+        vals = _percpu_values()
+        return float(vals[self.core_index]) if self.core_index < len(vals) else 0.0
+
+    def as_string(self) -> str:
+        return f"{self.as_numeric():.0f}"
+
+    def last_values(self) -> List[float]:
+        return []
+
+
+# Generate CpuCore00..CpuCore31 (covers up to 32 logical CPUs)
+for _i in range(32):
+    _cls = type(f"CpuCore{_i:02d}", (_CpuCoreBase,), {"core_index": _i})
+    globals()[_cls.__name__] = _cls
+del _i, _cls
