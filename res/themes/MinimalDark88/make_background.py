@@ -7,47 +7,58 @@ from pathlib import Path
 
 W, H = 480, 1920
 BG      = (14, 15, 18)
-DIVIDER = (38, 41, 48)
-LABEL   = (140, 144, 153)
-SUBTLE  = (90, 94, 102)
+BORDER  = (62, 68, 82)       # card outline
+DIVIDER = (38, 42, 52)       # header-bar underline inside each card
 ACCENT  = (95, 179, 214)
+SUBTLE  = (90, 94, 102)
+LABEL_C = (140, 144, 153)
 
-FONTS    = Path(__file__).resolve().parents[2] / "fonts"
-F_LABEL  = ImageFont.truetype(str(FONTS / "jetbrains-mono" / "JetBrainsMono-Bold.ttf"), 16)
+FONTS     = Path(__file__).resolve().parents[2] / "fonts"
 F_SECTION = ImageFont.truetype(str(FONTS / "jetbrains-mono" / "JetBrainsMono-ExtraBold.ttf"), 20)
-F_SUB    = ImageFont.truetype(str(FONTS / "jetbrains-mono" / "JetBrainsMono-Regular.ttf"), 14)
+F_SUB     = ImageFont.truetype(str(FONTS / "jetbrains-mono" / "JetBrainsMono-Regular.ttf"), 14)
 
 img = Image.new("RGB", (W, H), BG)
 d   = ImageDraw.Draw(img)
 
-# Section dividers (lines between sections)
-dividers = [80, 580, 1020, 1270, 1520]
-for y in dividers:
-    d.line([(12, y), (W - 12, y)], fill=DIVIDER, width=1)
+RADIUS  = 10
+MARGIN  = 6      # gap between screen edge and card
+PAD_X   = 20     # content left margin (matches theme.yaml X=20)
+HDR_H   = 30     # height of the label band inside each card
 
-# Section labels baked into background
-sections = [
-    (86,   "CPU"),
-    (586,  "GPU"),
-    (1026, "MEM"),
-    (1276, "DISK"),
-    (1526, "NET"),
+# (y_top, y_bottom, label, sub_label)
+cards = [
+    (2,    78,   None,   None),             # HEADER — no label, no sub-line
+    (82,   578,  "CPU",  "Ryzen 9 9950X3D"),
+    (582,  1018, "GPU",  "NVIDIA RTX 3060"),
+    (1022, 1268, "MEM",  None),
+    (1272, 1518, "DISK", None),
+    (1522, 1918, "NET",  None),
 ]
-for y, txt in sections:
-    d.text((20, y), txt, font=F_SECTION, fill=ACCENT)
 
-# Processor / GPU sub-labels
-d.text((20, 110), "Ryzen 9 9950X3D", font=F_SUB, fill=SUBTLE)
-d.text((20, 610), "NVIDIA RTX 3060", font=F_SUB, fill=SUBTLE)
-d.text((20, 1030), "RAM", font=F_SUB, fill=SUBTLE)
-d.text((20, 1280), "/", font=F_SUB, fill=SUBTLE)  # disk mount point placeholder
+for (yt, yb, label, sub) in cards:
+    # Outer card border
+    d.rounded_rectangle(
+        [MARGIN, yt, W - MARGIN, yb],
+        radius=RADIUS,
+        outline=BORDER,
+        width=1,
+    )
+    if label:
+        # Thin line under the label row
+        line_y = yt + HDR_H
+        d.line([(MARGIN + 1, line_y), (W - MARGIN - 1, line_y)], fill=DIVIDER, width=1)
+        # Section label
+        d.text((PAD_X, yt + 6), label, font=F_SECTION, fill=ACCENT)
+        # Sub-label (hardware name)
+        if sub:
+            d.text((PAD_X + 52, yt + 9), sub, font=F_SUB, fill=SUBTLE)
 
-# NET sub-labels
-d.text((20, 1560), "ETH  ↓", font=F_SUB, fill=SUBTLE)
-d.text((20, 1748), "ETH  ↑", font=F_SUB, fill=SUBTLE)
+# NET sub-labels for graph lanes
+d.text((PAD_X, 1558), "ETH  ↓", font=F_SUB, fill=SUBTLE)
+d.text((PAD_X, 1746), "ETH  ↑", font=F_SUB, fill=SUBTLE)
 
-# Left accent strip (matches MinimalDark35 style)
-d.rectangle([(0, 0), (4, 78)], fill=ACCENT)
+# Left accent strip on header card
+d.rectangle([(MARGIN, 2), (MARGIN + 4, 78)], fill=ACCENT)
 
 out = Path(__file__).with_name("background.png")
 img.save(out)
