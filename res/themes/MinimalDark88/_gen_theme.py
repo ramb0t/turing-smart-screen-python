@@ -23,9 +23,9 @@ BG = "background.png"
 #  HEADER  2..78
 #  CPU    82..640
 #  GPU   644..1000
-#  MEM  1004..1230
-#  DISK 1234..1520
-#  NET  1524..1918
+#  MEM  1004..1174
+#  NET  1178..1520
+#  DISK 1524..1918
 
 # --- per-core CCD grid -----------------------------------------------------
 # 9950X3D: 2 CCDs, 8 cores each, 2 HT threads → 4 rows of 8
@@ -204,17 +204,17 @@ CUSTOM_BLOCK = f"""  CUSTOM:
       TEXT:
         {_ctext(460, 1055, FONT_REG, 22, TXT_DIM, anchor="rt")}
 
-    # Disk I/O speeds with history line graphs
+    # Disk I/O speeds with history line graphs (DISK card 1524..1918)
     DiskReadMBs:
       TEXT:
-        {_ctext(460, 1396, FONT_BOLD, 22, ACCENT, anchor="rt")}
+        {_ctext(460, 1686, FONT_BOLD, 22, ACCENT, anchor="rt")}
       LINE_GRAPH:
-        {_cline(20, 1420, 440, 40)}
+        {_cline(20, 1702, 440, 80)}
     DiskWriteMBs:
       TEXT:
-        {_ctext(460, 1464, FONT_BOLD, 22, ACCENT_DIM, anchor="rt")}
+        {_ctext(460, 1794, FONT_BOLD, 22, ACCENT_DIM, anchor="rt")}
       LINE_GRAPH:
-        {_cline(20, 1488, 440, 24, color=ACCENT_DIM)}"""
+        {_cline(20, 1810, 440, 80, color=ACCENT_DIM)}"""
 
 
 def percore_lines() -> str:
@@ -280,11 +280,11 @@ STATS:
       TEXT:
         {text(x=460, y=130, font=FONT_BOLD, size=44, color=TXT, anchor="rt")}
     FREQUENCY:
-      INTERVAL: 5
+      INTERVAL: 1
       TEXT:
         {text(x=20, y=202, font=FONT_BOLD, size=28, color=ACCENT)}
     FAN_SPEED:
-      INTERVAL: 10
+      INTERVAL: 3
       TEXT:
         {text(x=460, y=207, font=FONT_REG, size=20, color=TXT_DIM, anchor="rt")}
 
@@ -310,17 +310,17 @@ STATS:
     MEMORY_TOTAL:
       SHOW: False
 
-  # ── MEMORY  (card 1004..1230, HDR_H=36, divider at 1040) ─────────────────
+  # ── MEMORY  (card 1004..1174, HDR_H=36, divider at 1040) ─────────────────
   # MemUsedGB / MemTotalGB shown via CUSTOM sensors; built-in USED/TOTAL hidden.
   MEMORY:
-    INTERVAL: 10
+    INTERVAL: 2
     VIRTUAL:
       PERCENT_TEXT:
         {text(x=460, y=1048, font=FONT_BOLD, size=44, color=TXT, anchor="rt")}
       GRAPH:
-        {bar(x=20, y=1110, w=440, h=22)}
+        {bar(x=20, y=1110, w=440, h=20)}
       LINE_GRAPH:
-        {linegraph(x=20, y=1146, w=440, h=72, autoscale=False)}
+        {linegraph(x=20, y=1134, w=440, h=36, autoscale=False)}
       USED:
         SHOW: False
       FREE:
@@ -328,34 +328,19 @@ STATS:
       TOTAL:
         SHOW: False
 
-  # ── DISK  (card 1234..1520, HDR_H=36, divider at 1270) ───────────────────
-  # DiskReadMBs / DiskWriteMBs shown via CUSTOM sensors below.
-  DISK:
-    INTERVAL: 30
-    USED:
-      PERCENT_TEXT:
-        {text(x=460, y=1278, font=FONT_BOLD, size=44, color=TXT, anchor="rt")}
-      GRAPH:
-        {bar(x=20, y=1338, w=440, h=22)}
-      TEXT:
-        {text(x=20, y=1372, font=FONT_REG, size=20, color=TXT_DIM)}
-    TOTAL:
-      TEXT:
-        {text(x=460, y=1372, font=FONT_REG, size=20, color=TXT_DIM, anchor="rt")}
-
-  # ── NET  (card 1524..1918, HDR_H=36, divider at 1560) ────────────────────
+  # ── NET  (card 1178..1520, HDR_H=36, divider at 1214) ────────────────────
   NET:
-    INTERVAL: 5
+    INTERVAL: 2
     ETH:
       DOWNLOAD:
         TEXT:
-          {text(x=460, y=1563, font=FONT_BOLD, size=22, color=ACCENT, anchor="rt", indent=10)}
+          {text(x=460, y=1222, font=FONT_BOLD, size=22, color=ACCENT, anchor="rt", indent=10)}
         LINE_GRAPH:
           SHOW: True
           X: 20
-          Y: 1580
+          Y: 1238
           WIDTH: 440
-          HEIGHT: 150
+          HEIGHT: 120
           MIN_VALUE: 0
           MAX_VALUE: 1000000
           HISTORY_SIZE: 120
@@ -366,13 +351,13 @@ STATS:
           BACKGROUND_IMAGE: {BG}
       UPLOAD:
         TEXT:
-          {text(x=460, y=1737, font=FONT_BOLD, size=22, color=ACCENT, anchor="rt", indent=10)}
+          {text(x=460, y=1366, font=FONT_BOLD, size=22, color=ACCENT, anchor="rt", indent=10)}
         LINE_GRAPH:
           SHOW: True
           X: 20
-          Y: 1753
+          Y: 1382
           WIDTH: 440
-          HEIGHT: 150
+          HEIGHT: 120
           MIN_VALUE: 0
           MAX_VALUE: 1000000
           HISTORY_SIZE: 120
@@ -381,6 +366,21 @@ STATS:
           LINE_WIDTH: 2
           AXIS: False
           BACKGROUND_IMAGE: {BG}
+
+  # ── DISK  (card 1524..1918, HDR_H=36, divider at 1560) ───────────────────
+  # DiskReadMBs / DiskWriteMBs shown via CUSTOM sensors below.
+  DISK:
+    INTERVAL: 3
+    USED:
+      PERCENT_TEXT:
+        {text(x=460, y=1568, font=FONT_BOLD, size=44, color=TXT, anchor="rt")}
+      GRAPH:
+        {bar(x=20, y=1625, w=440, h=22)}
+      TEXT:
+        {text(x=20, y=1660, font=FONT_REG, size=20, color=TXT_DIM)}
+    TOTAL:
+      TEXT:
+        {text(x=460, y=1660, font=FONT_REG, size=20, color=TXT_DIM, anchor="rt")}
 
 {CUSTOM_BLOCK}
 {percore_lines()}

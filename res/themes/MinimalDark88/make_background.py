@@ -14,7 +14,7 @@ ACCENT_DIM = (70, 130, 160)
 SUBTLE  = (90, 94, 102)
 
 FONTS     = Path(__file__).resolve().parents[2] / "fonts"
-F_SECTION = ImageFont.truetype(str(FONTS / "jetbrains-mono" / "JetBrainsMono-ExtraBold.ttf"), 20)
+F_SECTION = ImageFont.truetype(str(FONTS / "jetbrains-mono" / "JetBrainsMono-ExtraBold.ttf"), 26)
 F_LABEL   = ImageFont.truetype(str(FONTS / "jetbrains-mono" / "JetBrainsMono-Bold.ttf"), 14)
 F_SUB     = ImageFont.truetype(str(FONTS / "jetbrains-mono" / "JetBrainsMono-Regular.ttf"), 13)
 
@@ -31,9 +31,9 @@ cards = [
     (2,    78,   None,    None),
     (82,   640,  "CPU",   "Ryzen 9 9950X3D"),
     (644,  1000, "GPU",   "NVIDIA RTX 3060"),
-    (1004, 1230, "MEM",   None),
-    (1234, 1520, "DISK",  None),
-    (1524, 1918, "NET",   None),
+    (1004, 1174, "MEM",   None),
+    (1178, 1520, "NET",   None),
+    (1524, 1918, "DISK",  None),
 ]
 
 for (yt, yb, label, sub) in cards:
@@ -42,9 +42,9 @@ for (yt, yb, label, sub) in cards:
     if label:
         line_y = yt + HDR_H
         d.line([(MARGIN + 1, line_y), (W - MARGIN - 1, line_y)], fill=DIVIDER, width=1)
-        d.text((PAD_X, yt + 8), label, font=F_SECTION, fill=ACCENT)
+        d.text((PAD_X, yt + 5), label, font=F_SECTION, fill=ACCENT)
         if sub:
-            d.text((PAD_X + 60, yt + 11), sub, font=F_SUB, fill=SUBTLE)
+            d.text((PAD_X + 80, yt + 11), sub, font=F_SUB, fill=SUBTLE)
 
 # Accent strip on HEADER card
 d.rectangle([(MARGIN, 2), (MARGIN + 4, 78)], fill=ACCENT)
@@ -59,13 +59,13 @@ d.text((PAD_X, 852), "GPU UTIL %", font=F_SUB, fill=SUBTLE)
 # ── MEM section sub-label ───────────────────────────────────────────────────
 d.text((PAD_X, 1044), "used", font=F_SUB, fill=SUBTLE)
 
-# ── DISK R/W labels ─────────────────────────────────────────────────────────
-d.text((PAD_X, 1394), "READ  MB/s",  font=F_SUB, fill=SUBTLE)
-d.text((PAD_X, 1462), "WRITE MB/s", font=F_SUB, fill=SUBTLE)
-
 # ── NET labels ──────────────────────────────────────────────────────────────
-d.text((PAD_X, 1562), "ETH  ↓", font=F_SUB, fill=SUBTLE)
-d.text((PAD_X, 1736), "ETH  ↑", font=F_SUB, fill=SUBTLE)
+d.text((PAD_X, 1222), "ETH  ↓", font=F_SUB, fill=SUBTLE)
+d.text((PAD_X, 1366), "ETH  ↑", font=F_SUB, fill=SUBTLE)
+
+# ── DISK R/W labels ─────────────────────────────────────────────────────────
+d.text((PAD_X, 1685), "READ  MB/s",  font=F_SUB, fill=SUBTLE)
+d.text((PAD_X, 1793), "WRITE MB/s", font=F_SUB, fill=SUBTLE)
 
 out = Path(__file__).with_name("background.png")
 img.save(out)

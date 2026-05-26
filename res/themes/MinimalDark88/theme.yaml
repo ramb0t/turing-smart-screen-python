@@ -106,7 +106,7 @@ STATS:
         BACKGROUND_IMAGE: background.png
         ANCHOR: rt
     FREQUENCY:
-      INTERVAL: 5
+      INTERVAL: 1
       TEXT:
         SHOW: True
         SHOW_UNIT: True
@@ -118,7 +118,7 @@ STATS:
         BACKGROUND_IMAGE: background.png
         ANCHOR: lt
     FAN_SPEED:
-      INTERVAL: 10
+      INTERVAL: 3
       TEXT:
         SHOW: True
         SHOW_UNIT: True
@@ -198,10 +198,10 @@ STATS:
     MEMORY_TOTAL:
       SHOW: False
 
-  # ── MEMORY  (card 1004..1230, HDR_H=36, divider at 1040) ─────────────────
+  # ── MEMORY  (card 1004..1174, HDR_H=36, divider at 1040) ─────────────────
   # MemUsedGB / MemTotalGB shown via CUSTOM sensors; built-in USED/TOTAL hidden.
   MEMORY:
-    INTERVAL: 10
+    INTERVAL: 2
     VIRTUAL:
       PERCENT_TEXT:
         SHOW: True
@@ -218,7 +218,7 @@ STATS:
         X: 20
         Y: 1110
         WIDTH: 440
-        HEIGHT: 22
+        HEIGHT: 20
         MIN_VALUE: 0
         MAX_VALUE: 100
         BAR_COLOR: 95, 179, 214
@@ -227,9 +227,9 @@ STATS:
       LINE_GRAPH:
         SHOW: True
         X: 20
-        Y: 1146
+        Y: 1134
         WIDTH: 440
-        HEIGHT: 72
+        HEIGHT: 36
         MIN_VALUE: 0
         MAX_VALUE: 100
         HISTORY_SIZE: 120
@@ -245,64 +245,16 @@ STATS:
       TOTAL:
         SHOW: False
 
-  # ── DISK  (card 1234..1520, HDR_H=36, divider at 1270) ───────────────────
-  # DiskReadMBs / DiskWriteMBs shown via CUSTOM sensors below.
-  DISK:
-    INTERVAL: 30
-    USED:
-      PERCENT_TEXT:
-        SHOW: True
-        SHOW_UNIT: True
-        X: 460
-        Y: 1278
-        FONT: jetbrains-mono/JetBrainsMono-Bold.ttf
-        FONT_SIZE: 44
-        FONT_COLOR: 224, 226, 230
-        BACKGROUND_IMAGE: background.png
-        ANCHOR: rt
-      GRAPH:
-        SHOW: True
-        X: 20
-        Y: 1338
-        WIDTH: 440
-        HEIGHT: 22
-        MIN_VALUE: 0
-        MAX_VALUE: 100
-        BAR_COLOR: 95, 179, 214
-        BAR_OUTLINE: False
-        BACKGROUND_COLOR: 32, 35, 42
-      TEXT:
-        SHOW: True
-        SHOW_UNIT: True
-        X: 20
-        Y: 1372
-        FONT: jetbrains-mono/JetBrainsMono-Regular.ttf
-        FONT_SIZE: 20
-        FONT_COLOR: 140, 144, 153
-        BACKGROUND_IMAGE: background.png
-        ANCHOR: lt
-    TOTAL:
-      TEXT:
-        SHOW: True
-        SHOW_UNIT: True
-        X: 460
-        Y: 1372
-        FONT: jetbrains-mono/JetBrainsMono-Regular.ttf
-        FONT_SIZE: 20
-        FONT_COLOR: 140, 144, 153
-        BACKGROUND_IMAGE: background.png
-        ANCHOR: rt
-
-  # ── NET  (card 1524..1918, HDR_H=36, divider at 1560) ────────────────────
+  # ── NET  (card 1178..1520, HDR_H=36, divider at 1214) ────────────────────
   NET:
-    INTERVAL: 5
+    INTERVAL: 2
     ETH:
       DOWNLOAD:
         TEXT:
           SHOW: True
           SHOW_UNIT: True
           X: 460
-          Y: 1563
+          Y: 1222
           FONT: jetbrains-mono/JetBrainsMono-Bold.ttf
           FONT_SIZE: 22
           FONT_COLOR: 95, 179, 214
@@ -311,9 +263,9 @@ STATS:
         LINE_GRAPH:
           SHOW: True
           X: 20
-          Y: 1580
+          Y: 1238
           WIDTH: 440
-          HEIGHT: 150
+          HEIGHT: 120
           MIN_VALUE: 0
           MAX_VALUE: 1000000
           HISTORY_SIZE: 120
@@ -327,7 +279,7 @@ STATS:
           SHOW: True
           SHOW_UNIT: True
           X: 460
-          Y: 1737
+          Y: 1366
           FONT: jetbrains-mono/JetBrainsMono-Bold.ttf
           FONT_SIZE: 22
           FONT_COLOR: 95, 179, 214
@@ -336,9 +288,9 @@ STATS:
         LINE_GRAPH:
           SHOW: True
           X: 20
-          Y: 1753
+          Y: 1382
           WIDTH: 440
-          HEIGHT: 150
+          HEIGHT: 120
           MIN_VALUE: 0
           MAX_VALUE: 1000000
           HISTORY_SIZE: 120
@@ -347,6 +299,54 @@ STATS:
           LINE_WIDTH: 2
           AXIS: False
           BACKGROUND_IMAGE: background.png
+
+  # ── DISK  (card 1524..1918, HDR_H=36, divider at 1560) ───────────────────
+  # DiskReadMBs / DiskWriteMBs shown via CUSTOM sensors below.
+  DISK:
+    INTERVAL: 3
+    USED:
+      PERCENT_TEXT:
+        SHOW: True
+        SHOW_UNIT: True
+        X: 460
+        Y: 1568
+        FONT: jetbrains-mono/JetBrainsMono-Bold.ttf
+        FONT_SIZE: 44
+        FONT_COLOR: 224, 226, 230
+        BACKGROUND_IMAGE: background.png
+        ANCHOR: rt
+      GRAPH:
+        SHOW: True
+        X: 20
+        Y: 1625
+        WIDTH: 440
+        HEIGHT: 22
+        MIN_VALUE: 0
+        MAX_VALUE: 100
+        BAR_COLOR: 95, 179, 214
+        BAR_OUTLINE: False
+        BACKGROUND_COLOR: 32, 35, 42
+      TEXT:
+        SHOW: True
+        SHOW_UNIT: True
+        X: 20
+        Y: 1660
+        FONT: jetbrains-mono/JetBrainsMono-Regular.ttf
+        FONT_SIZE: 20
+        FONT_COLOR: 140, 144, 153
+        BACKGROUND_IMAGE: background.png
+        ANCHOR: lt
+    TOTAL:
+      TEXT:
+        SHOW: True
+        SHOW_UNIT: True
+        X: 460
+        Y: 1660
+        FONT: jetbrains-mono/JetBrainsMono-Regular.ttf
+        FONT_SIZE: 20
+        FONT_COLOR: 140, 144, 153
+        BACKGROUND_IMAGE: background.png
+        ANCHOR: rt
 
   CUSTOM:
     INTERVAL: 1
@@ -423,13 +423,13 @@ STATS:
         BACKGROUND_IMAGE: background.png
         ANCHOR: rt
 
-    # Disk I/O speeds with history line graphs
+    # Disk I/O speeds with history line graphs (DISK card 1524..1918)
     DiskReadMBs:
       TEXT:
         SHOW: True
         SHOW_UNIT: False
         X: 460
-        Y: 1396
+        Y: 1686
         FONT: jetbrains-mono/JetBrainsMono-Bold.ttf
         FONT_SIZE: 22
         FONT_COLOR: 95, 179, 214
@@ -438,9 +438,9 @@ STATS:
       LINE_GRAPH:
         SHOW: True
         X: 20
-        Y: 1420
+        Y: 1702
         WIDTH: 440
-        HEIGHT: 40
+        HEIGHT: 80
         MIN_VALUE: 0
         MAX_VALUE: 100
         HISTORY_SIZE: 120
@@ -454,7 +454,7 @@ STATS:
         SHOW: True
         SHOW_UNIT: False
         X: 460
-        Y: 1464
+        Y: 1794
         FONT: jetbrains-mono/JetBrainsMono-Bold.ttf
         FONT_SIZE: 22
         FONT_COLOR: 70, 130, 160
@@ -463,9 +463,9 @@ STATS:
       LINE_GRAPH:
         SHOW: True
         X: 20
-        Y: 1488
+        Y: 1810
         WIDTH: 440
-        HEIGHT: 24
+        HEIGHT: 80
         MIN_VALUE: 0
         MAX_VALUE: 100
         HISTORY_SIZE: 120
