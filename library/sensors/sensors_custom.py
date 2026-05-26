@@ -26,6 +26,7 @@ import glob
 import math
 import os
 import platform
+import threading
 import time
 from abc import ABC, abstractmethod
 from typing import List
@@ -77,17 +78,27 @@ class ExampleCustomTextOnlyData(CustomDataSource):
 
 # ---------------------------------------------------------------------------
 # Per-core CPU load  (CpuCore00..CpuCore31)
+# Background thread polls every 0.25 s so readings are always fresh.
 # ---------------------------------------------------------------------------
-_PERCPU_CACHE = {"values": [], "ts": 0.0}
-_PERCPU_TTL = 0.5
+_PERCPU_LOCK = threading.Lock()
+_PERCPU_DATA: List[float] = []
+
+
+def _percpu_worker() -> None:
+    psutil.cpu_percent(percpu=True)  # prime counters; first call always returns 0
+    while True:
+        vals = psutil.cpu_percent(interval=0.25, percpu=True)
+        with _PERCPU_LOCK:
+            global _PERCPU_DATA
+            _PERCPU_DATA = vals
+
+
+threading.Thread(target=_percpu_worker, daemon=True, name="percpu-poller").start()
 
 
 def _percpu_values() -> List[float]:
-    now = time.monotonic()
-    if now - _PERCPU_CACHE["ts"] > _PERCPU_TTL or not _PERCPU_CACHE["values"]:
-        _PERCPU_CACHE["values"] = psutil.cpu_percent(interval=None, percpu=True)
-        _PERCPU_CACHE["ts"] = now
-    return _PERCPU_CACHE["values"]
+    with _PERCPU_LOCK:
+        return list(_PERCPU_DATA) if _PERCPU_DATA else [0.0] * 32
 
 
 class _CpuCoreBase(CustomDataSource):

@@ -183,10 +183,10 @@ CUSTOM_BLOCK = f"""  CUSTOM:
     # Power — text only, positioned in each card's header band
     CpuPowerW:
       TEXT:
-        {_ctext(460, 90, FONT_BOLD, 20, ACCENT_DIM, anchor="rt")}
+        {_ctext(460, 90, FONT_BOLD, 24, ACCENT_DIM, anchor="rt")}
     GpuPowerW:
       TEXT:
-        {_ctext(460, 652, FONT_BOLD, 20, ACCENT_DIM, anchor="rt")}
+        {_ctext(460, 652, FONT_BOLD, 24, ACCENT_DIM, anchor="rt")}
 
     # GPU memory in GB (replaces built-in MB readout)
     GpuMemUsedGB:
@@ -270,7 +270,7 @@ STATS:
     PERCENTAGE:
       INTERVAL: 1
       TEXT:
-        {text(x=460, y=130, font=FONT_BOLD, size=44, color=TXT, anchor="rt")}
+        {text(x=20, y=126, font=FONT_EBOLD, size=58, color=TXT)}
       GRAPH:
         {bar(x=20, y=248, w=440, h=22)}
       LINE_GRAPH:
@@ -278,13 +278,13 @@ STATS:
     TEMPERATURE:
       INTERVAL: 1
       TEXT:
-        {text(x=20, y=126, font=FONT_EBOLD, size=58, color=TXT)}
+        {text(x=460, y=130, font=FONT_BOLD, size=44, color=TXT, anchor="rt")}
     FREQUENCY:
-      INTERVAL: 2
+      INTERVAL: 5
       TEXT:
         {text(x=20, y=202, font=FONT_BOLD, size=28, color=ACCENT)}
     FAN_SPEED:
-      INTERVAL: 2
+      INTERVAL: 10
       TEXT:
         {text(x=460, y=207, font=FONT_REG, size=20, color=TXT_DIM, anchor="rt")}
 
@@ -294,14 +294,14 @@ STATS:
     INTERVAL: 1
     PERCENTAGE:
       TEXT:
-        {text(x=460, y=693, font=FONT_BOLD, size=44, color=TXT, anchor="rt")}
+        {text(x=20, y=688, font=FONT_EBOLD, size=58, color=TXT)}
       GRAPH:
         {bar(x=20, y=800, w=440, h=22)}
       LINE_GRAPH:
         {linegraph(x=20, y=866, w=440, h=100, autoscale=False)}
     TEMPERATURE:
       TEXT:
-        {text(x=20, y=688, font=FONT_EBOLD, size=58, color=TXT)}
+        {text(x=460, y=693, font=FONT_BOLD, size=44, color=TXT, anchor="rt")}
     MEMORY_PERCENT:
       GRAPH:
         {bar(x=20, y=830, w=440, h=14, color=ACCENT_DIM)}
@@ -313,7 +313,7 @@ STATS:
   # ── MEMORY  (card 1004..1230, HDR_H=36, divider at 1040) ─────────────────
   # MemUsedGB / MemTotalGB shown via CUSTOM sensors; built-in USED/TOTAL hidden.
   MEMORY:
-    INTERVAL: 2
+    INTERVAL: 10
     VIRTUAL:
       PERCENT_TEXT:
         {text(x=460, y=1048, font=FONT_BOLD, size=44, color=TXT, anchor="rt")}
@@ -331,7 +331,7 @@ STATS:
   # ── DISK  (card 1234..1520, HDR_H=36, divider at 1270) ───────────────────
   # DiskReadMBs / DiskWriteMBs shown via CUSTOM sensors below.
   DISK:
-    INTERVAL: 10
+    INTERVAL: 30
     USED:
       PERCENT_TEXT:
         {text(x=460, y=1278, font=FONT_BOLD, size=44, color=TXT, anchor="rt")}
@@ -345,7 +345,7 @@ STATS:
 
   # ── NET  (card 1524..1918, HDR_H=36, divider at 1560) ────────────────────
   NET:
-    INTERVAL: 1
+    INTERVAL: 5
     ETH:
       DOWNLOAD:
         TEXT:
