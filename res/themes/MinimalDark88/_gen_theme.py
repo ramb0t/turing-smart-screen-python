@@ -202,7 +202,7 @@ CUSTOM_BLOCK = f"""  CUSTOM:
         {_ctext(20, 1050, FONT_BOLD, 32, ACCENT)}
     MemTotalGB:
       TEXT:
-        {_ctext(460, 1055, FONT_REG, 22, TXT_DIM, anchor="rt")}
+        {_ctext(20, 1086, FONT_REG, 18, TXT_DIM)}
 
     # Disk I/O speeds with history line graphs (DISK card 1524..1918)
     DiskReadMBs:

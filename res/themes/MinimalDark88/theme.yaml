@@ -415,13 +415,13 @@ STATS:
       TEXT:
         SHOW: True
         SHOW_UNIT: False
-        X: 460
-        Y: 1055
+        X: 20
+        Y: 1086
         FONT: jetbrains-mono/JetBrainsMono-Regular.ttf
-        FONT_SIZE: 22
+        FONT_SIZE: 18
         FONT_COLOR: 140, 144, 153
         BACKGROUND_IMAGE: background.png
-        ANCHOR: rt
+        ANCHOR: lt
 
     # Disk I/O speeds with history line graphs (DISK card 1524..1918)
     DiskReadMBs:
